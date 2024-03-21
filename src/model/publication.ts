@@ -1,3 +1,4 @@
+import { UUID } from "crypto"
 import { Establishment } from "./establishment"
 import { User } from "./user"
 
@@ -8,7 +9,8 @@ import { User } from "./user"
  *      Publication:
  *          properties:
  *              id:
- *                  type: number
+ *                  type: string
+ *                  format: uuid
  *              date:
  *                  type: number
  *              total_price:
@@ -23,7 +25,7 @@ import { User } from "./user"
  *                  $ref: '#/components/schemas/User'
  */
 export class Publication {
-    id: number
+    id: UUID
     date: number
     total_price: number
     total_score: number
@@ -32,7 +34,7 @@ export class Publication {
     user: User
 
     constructor(
-        id: number,
+        id: UUID,
         date: number,
         total_price: number,
         total_score: number,
@@ -47,5 +49,17 @@ export class Publication {
         this.photo = photo
         this.establishment = establishment
         this.user = user
+    }
+
+    toArray() {
+        return [
+            this.id,
+            this.date,
+            this.total_price,
+            this.total_score,
+            this.photo,
+            this.establishment.id,
+            this.user.id
+        ]
     }
 }

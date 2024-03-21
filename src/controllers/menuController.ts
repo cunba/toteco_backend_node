@@ -3,33 +3,33 @@ import { randomUUID, UUID } from "crypto"
 import { Router } from "express"
 import { body, ValidationError, validationResult } from "express-validator"
 import { apiLog, error, info } from "../constants/constants"
-import { EstablishmentDTO } from "../model/DTO/establishmentDTO"
-import { Establishment } from "../model/establishment"
+import { MenuDTO } from "../model/DTO/menuDTO"
 import { Exception } from "../model/exception"
-import { establishmentsRepository } from "../repository/establishments/establishmentsRepository"
+import { Menu } from "../model/menu"
+import { menusRepository } from "../repository/menus/menusRepository"
 
-const establishmentsControllerRouter = Router()
+const menusControllerRouter = Router()
 
 /**
  * @openapi
- * /establishments:
+ * /menus:
  *  post:
- *      description: Create new establishment
- *      operationId: saveEstablishment
+ *      description: Create new menu
+ *      operationId: saveMenu
  *      tags:
- *      - Establishments
+ *      - Menus
  *      requestBody:
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#/components/schemas/EstablishmentDTO'
+ *                      $ref: '#/components/schemas/MenuDTO'
  *      responses:
  *          201:
  *              description: CREATED
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Establishment'
+ *                          $ref: '#/components/schemas/Menu'
  *          400:
  *              description: BAD REQUEST
  *              content:
@@ -49,11 +49,11 @@ const establishmentsControllerRouter = Router()
  *                      schema:
  *                          $ref: '#/components/schemas/Exception'
  */
-establishmentsControllerRouter.post('/establishments', json(),
+menusControllerRouter.post('/menus', json(),
     body('name').trim().notEmpty(),
     body('location').trim().notEmpty(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'New establishment request:'))
+        console.log(info(), apiLog('Api', '\t', 'New menu request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
 
         const errors: any = validationResult(req)
@@ -66,26 +66,24 @@ establishmentsControllerRouter.post('/establishments', json(),
                     exception.errors?.set(e.param, 'required but not provided')
                 }
             })
-            console.log(error(), apiLog('Api', '\t', 'New establishment request', 'validation error:'))
+            console.log(error(), apiLog('Api', '\t', 'New menu request', 'validation error:'))
             console.log('\t\t', apiLog(JSON.stringify(exception)))
 
             return res.status(400).send(exception)
         }
 
-        const establishmentDTO = req.body as EstablishmentDTO
+        const menuDTO = req.body as MenuDTO
 
-        const establishment = new Establishment(
+        const menu = new Menu(
             randomUUID(),
-            establishmentDTO.name,
             new Date().getTime(),
-            establishmentDTO.location,
-            true,
+            0,
             0
         )
 
         try {
-            await establishmentsRepository.save(establishment)
-            return res.status(201).send(establishment)
+            await menusRepository.save(menu)
+            return res.status(201).send(menu)
         } catch (err: any) {
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
         }
@@ -94,17 +92,17 @@ establishmentsControllerRouter.post('/establishments', json(),
 
 /**
  * @openapi
- * /establishments:
+ * /menus:
  *  put:
- *      description: Update establishment
- *      operationId: updateEstablishment
+ *      description: Update menu
+ *      operationId: updateMenu
  *      tags:
- *      - Establishments
+ *      - Menus
  *      requestBody:
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#/components/schemas/Establishment'
+ *                      $ref: '#/components/schemas/Menu'
  *      responses:
  *          200:
  *              description: SUCCESS
@@ -138,13 +136,13 @@ establishmentsControllerRouter.post('/establishments', json(),
  *                      schema:
  *                          $ref: '#/components/schemas/Exception'
  */
-establishmentsControllerRouter.put('/establishments', json(),
+menusControllerRouter.put('/menus', json(),
     body('id').trim().notEmpty(),
     body('name').trim().notEmpty(),
     body('location').trim().notEmpty(),
     body('score').notEmpty(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'Update establishment request:'))
+        console.log(info(), apiLog('Api', '\t', 'Update menu request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
 
         const errors: any = validationResult(req)
@@ -157,22 +155,22 @@ establishmentsControllerRouter.put('/establishments', json(),
                     exception.errors?.set(e.param, 'required but not provided')
                 }
             })
-            console.log(error(), apiLog('Api', '\t', 'New establishment request', 'validation error:'))
+            console.log(error(), apiLog('Api', '\t', 'New menu request', 'validation error:'))
             console.log('\t\t', apiLog(JSON.stringify(exception)))
 
             return res.status(400).send(exception)
         }
 
-        const establishment = req.body as Establishment
+        const menu = req.body as Menu
 
         try {
-            await establishmentsRepository.findById(establishment.id)
+            await menusRepository.findById(menu.id)
         } catch (err: any) {
             return res.status(404).send(err.message ?? 'Not found exception')
         }
 
         try {
-            const response = await establishmentsRepository.update(establishment)
+            const response = await menusRepository.update(menu)
             return res.status(200).send(response)
         } catch (err: any) {
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -181,12 +179,12 @@ establishmentsControllerRouter.put('/establishments', json(),
 
 /**
  * @openapi
- * /establishments:
+ * /menus:
  *  delete:
- *      description: Delete all establishments
- *      operationId: deleteAllEstablishment
+ *      description: Delete all menus
+ *      operationId: deleteAllMenu
  *      tags:
- *      - Establishments
+ *      - Menus
  *      responses:
  *          200:
  *              description: SUCCESS
@@ -214,9 +212,9 @@ establishmentsControllerRouter.put('/establishments', json(),
  *                      schema:
  *                          $ref: '#/components/schemas/Exception'
  */
-establishmentsControllerRouter.delete('/establishments', json(), async (req, res) => {
+menusControllerRouter.delete('/menus', json(), async (req, res) => {
     try {
-        const response = await establishmentsRepository.deleteAll()
+        const response = await menusRepository.deleteAll()
         return res.status(200).send(response)
     } catch (err: any) {
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -225,12 +223,12 @@ establishmentsControllerRouter.delete('/establishments', json(), async (req, res
 
 /**
  * @openapi
- * /establishments/id/{id}:
+ * /menus/id/{id}:
  *  get:
- *      description: Get establishment by id
- *      operationId: getEstablishmentById
+ *      description: Get menu by id
+ *      operationId: getMenuById
  *      tags:
- *      - Establishments
+ *      - Menus
  *      parameters:
  *          - in: path
  *            name: id
@@ -244,7 +242,7 @@ establishmentsControllerRouter.delete('/establishments', json(), async (req, res
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Establishment'
+ *                          $ref: '#/components/schemas/Menu'
  *          400:
  *              description: BAD REQUEST
  *              content:
@@ -264,9 +262,9 @@ establishmentsControllerRouter.delete('/establishments', json(), async (req, res
  *                      schema:
  *                          $ref: '#/components/schemas/Exception'
  */
-establishmentsControllerRouter.get('/establishments/id/:id', json(), async (req, res) => {
+menusControllerRouter.get('/menus/id/:id', json(), async (req, res) => {
     try {
-        const response = await establishmentsRepository.findById(req.params.id as UUID)
+        const response = await menusRepository.findById(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
         console.log(err)
@@ -276,12 +274,12 @@ establishmentsControllerRouter.get('/establishments/id/:id', json(), async (req,
 
 /**
  * @openapi
- * /establishments:
+ * /menus:
  *  get:
- *      description: Get all establishments
- *      operationId: getAllEstablishment
+ *      description: Get all menus
+ *      operationId: getAllMenu
  *      tags:
- *      - Establishments
+ *      - Menus
  *      responses:
  *          200:
  *              description: SUCCESS
@@ -290,7 +288,7 @@ establishmentsControllerRouter.get('/establishments/id/:id', json(), async (req,
  *                      schema:
  *                          type: array
  *                          items:
- *                              $ref: '#/components/schemas/Establishment'
+ *                              $ref: '#/components/schemas/Menu'
  *          400:
  *              description: BAD REQUEST
  *              content:
@@ -310,62 +308,13 @@ establishmentsControllerRouter.get('/establishments/id/:id', json(), async (req,
  *                      schema:
  *                          $ref: '#/components/schemas/Exception'
  */
-establishmentsControllerRouter.get('/establishments', json(), async (req, res) => {
+menusControllerRouter.get('/menus', json(), async (req, res) => {
     try {
-        const response = await establishmentsRepository.findAll()
+        const response = await menusRepository.findAll()
         return res.status(200).send(response)
     } catch (err: any) {
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
 
-/**
- * @openapi
- * /establishments/name/{name}:
- *  get:
- *      description: Get by name
- *      operationId: getEstablishmentByName
- *      tags:
- *      - Establishments
- *      parameters:
- *          - in: path
- *            name: name
- *            required: true
- *            schema:
- *                type: string
- *      responses:
- *          200:
- *              description: SUCCESS
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Establishment'
- *          400:
- *              description: BAD REQUEST
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Exception'
- *          401:
- *              description: UNAUTHORIZED
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Exception'
- *          500:
- *              description: INTERNAL SERVER ERROR
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Exception'
- */
-establishmentsControllerRouter.get('/establishments/name/:name', json(), async (req, res) => {
-    try {
-        const response = await establishmentsRepository.findByName(req.params.name)
-        return res.status(200).send(response)
-    } catch (err: any) {
-        return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
-    }
-})
-
-export default establishmentsControllerRouter
+export default menusControllerRouter

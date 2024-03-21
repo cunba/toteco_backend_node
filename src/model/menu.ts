@@ -1,3 +1,4 @@
+import { UUID } from "crypto"
 import { Product } from "./product"
 
 /**
@@ -7,7 +8,8 @@ import { Product } from "./product"
  *      Menu:
  *          properties:
  *              id:
- *                  type: number
+ *                  type: string
+ *                  format: uuid
  *              date:
  *                  type: number
  *              price:
@@ -20,14 +22,14 @@ import { Product } from "./product"
  *                      $ref: '#/components/schemas/Product'
  */
 export class Menu {
-    id: number
+    id: UUID
     date: number
     price: number
     score: number
     products?: Product[]
 
     constructor(
-        id: number,
+        id: UUID,
         date: number,
         price: number,
         score: number
@@ -36,5 +38,14 @@ export class Menu {
         this.date = date
         this.price = price
         this.score = score
+    }
+
+    toArray() {
+        return [
+            this.id,
+            this.date,
+            this.price,
+            this.score
+        ]
     }
 }

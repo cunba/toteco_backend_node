@@ -1,3 +1,5 @@
+import { UUID } from "crypto"
+
 /**
  * @openapi
  * components:
@@ -5,7 +7,8 @@
  *      User:
  *          properties:
  *              id:
- *                  type: number
+ *                  type: string
+ *                  format: uuid
  *              name:
  *                  type: string
  *              surname:
@@ -26,7 +29,7 @@
  *                  type: number
  */
 export class User {
-    id: number
+    id: UUID
     name: string
     surname: string
     birth_date: number
@@ -39,7 +42,7 @@ export class User {
     recovering_code: number
 
     constructor(
-        id: number,
+        id: UUID,
         name: string,
         surname: string,
         birth_date: number,
@@ -62,5 +65,21 @@ export class User {
         this.money_spent = money_spent
         this.publications_number = publications_number
         this.recovering_code = recovering_code
+    }
+
+    toArray() {
+        return [
+            this.id,
+            this.name,
+            this.surname,
+            this.birth_date,
+            this.email,
+            this.password,
+            this.creation_date,
+            this.is_active,
+            this.money_spent,
+            this.publications_number,
+            this.recovering_code
+        ]
     }
 }
