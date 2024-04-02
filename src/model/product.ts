@@ -33,8 +33,8 @@ export class Product {
     in_menu: boolean
     price: number
     score: number
-    menu?: Menu
     publication: Publication
+    menu?: Menu
 
     constructor(
         id: UUID,

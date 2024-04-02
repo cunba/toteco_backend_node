@@ -1,3 +1,5 @@
+import { UUID } from "crypto"
+
 /**
  * @openapi
  * components:
@@ -22,16 +24,16 @@ export class ProductDTO {
     in_menu: boolean
     price?: number
     score?: number
-    menu_id?: string
-    publication_id?: number
+    menu_id?: UUID
+    publication_id?: UUID
 
     constructor(
         name: string,
         in_menu: boolean,
         price?: number,
         score?: number,
-        menu_id?: string,
-        publication_id?: number
+        menu_id?: UUID,
+        publication_id?: UUID
     ) {
         this.name = name
         this.in_menu = in_menu

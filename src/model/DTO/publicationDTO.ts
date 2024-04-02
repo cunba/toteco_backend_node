@@ -1,3 +1,5 @@
+import { UUID } from "crypto"
+
 /**
  * @openapi
  * components:
@@ -19,15 +21,15 @@ export class PublicationDTO {
     total_price: number
     total_score: number
     photo: any
-    establishment_id: number
-    user_id: number
+    establishment_id: UUID
+    user_id: UUID
 
     constructor(
         total_price: number,
         total_score: number,
         photo: any,
-        establishment_id: number,
-        user_id: number
+        establishment_id: UUID,
+        user_id: UUID
     ) {
         this.total_price = total_price
         this.total_score = total_score
