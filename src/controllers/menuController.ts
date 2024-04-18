@@ -50,8 +50,8 @@ const menusControllerRouter = Router()
  *                          $ref: '#/components/schemas/Exception'
  */
 menusControllerRouter.post('/menus', json(),
-    body('name').trim().notEmpty(),
-    body('location').trim().notEmpty(),
+    body('price').trim().notEmpty().isNumeric(),
+    body('score').trim().notEmpty().isNumeric(),
     async (req, res) => {
         console.log(info(), apiLog('Api', '\t', 'New menu request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
@@ -77,8 +77,9 @@ menusControllerRouter.post('/menus', json(),
         const menu = new Menu(
             randomUUID(),
             new Date().getTime(),
-            0,
-            0
+            null,
+            menuDTO.price,
+            menuDTO.score
         )
 
         try {
@@ -138,9 +139,9 @@ menusControllerRouter.post('/menus', json(),
  */
 menusControllerRouter.put('/menus', json(),
     body('id').trim().notEmpty(),
-    body('name').trim().notEmpty(),
-    body('location').trim().notEmpty(),
-    body('score').notEmpty(),
+    body('date').trim().notEmpty().isNumeric(),
+    body('price').trim().notEmpty().isNumeric(),
+    body('score').trim().notEmpty().isNumeric(),
     async (req, res) => {
         console.log(info(), apiLog('Api', '\t', 'Update menu request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))

@@ -14,7 +14,7 @@ export const establishmentsRepository: IEstablishmentsRepository = {
                 `INSERT INTO ${schemaName}(
                     id,
                     name,
-                    creation_date,
+                    created,
                     location,
                     is_open,
                     score
@@ -49,7 +49,7 @@ export const establishmentsRepository: IEstablishmentsRepository = {
                 `INSERT INTO ${schemaName}(
                     id,
                     name,
-                    creation_date,
+                    created,
                     location,
                     is_open,
                     score

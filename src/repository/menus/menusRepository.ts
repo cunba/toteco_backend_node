@@ -14,7 +14,7 @@ export const menusRepository: IMenusRepository = {
                 `INSERT INTO ${schemaName}(
                     id,
                     name,
-                    creation_date,
+                    created,
                     location,
                     is_open,
                     score
@@ -36,7 +36,7 @@ export const menusRepository: IMenusRepository = {
                 `INSERT INTO ${schemaName}(
                     id,
                     name,
-                    creation_date,
+                    created,
                     location,
                     is_open,
                     score

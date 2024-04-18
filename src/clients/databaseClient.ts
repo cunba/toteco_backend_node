@@ -16,7 +16,8 @@ export const databaseClient = async () => {
             `CREATE TABLE IF NOT EXISTS establishments(
                 id UUID PRIMARY KEY,
                 name VARCHAR(30),
-                creation_date BIGINT,
+                created BIGINT,
+                updated BIGINT NULL,
                 location VARCHAR(50),
                 is_open BOOLEAN,
                 score DECIMAL(3,1)
@@ -29,7 +30,8 @@ export const databaseClient = async () => {
         .query(
             `CREATE TABLE IF NOT EXISTS menus(
                 id UUID PRIMARY KEY,
-                creation_date BIGINT,
+                created BIGINT,
+                updated BIGINT NULL,
                 price DECIMAL(4,2),
                 score DECIMAL(3,1)
             );`
@@ -41,16 +43,19 @@ export const databaseClient = async () => {
         .query(
             `CREATE TABLE IF NOT EXISTS users(
                 id UUID PRIMARY KEY,
+                username VARCHAR(30),
                 name VARCHAR(30),
                 surname VARCHAR(30),
                 birth_date TIMESTAMP,
                 email VARCHAR(50),
                 password VARCHAR(100),
-                creation_date BIGINT,
+                created BIGINT,
+                updated BIGINT NULL,
                 is_active BOOLEAN,
                 money_spent DECIMAL(8,2),
                 publications_number INTEGER,
-                role VARCHAR(10)
+                role VARCHAR(10),
+                recovery_code INTEGER(5) NULL
             );`
         )
         .then((res: any) => console.log(info(), postgresLog('Postgre', 'users table created if not exists')))
@@ -60,7 +65,8 @@ export const databaseClient = async () => {
         .query(
             `CREATE TABLE IF NOT EXISTS publications(
                 id UUID PRIMARY KEY,
-                creation_date BIGINT,
+                created BIGINT,
+                updated BIGINT NULL,
                 total_price DECIMAL(5,2),
                 total_score DECIMAL(3,1),
                 photo VARCHAR(50),
@@ -84,7 +90,8 @@ export const databaseClient = async () => {
             `CREATE TABLE IF NOT EXISTS products(
                 id UUID PRIMARY KEY,
                 name VARCHAR(50),
-                creation_date BIGINT,
+                created BIGINT,
+                updated BIGINT NULL,
                 in_menu BOOLEAN,
                 price DECIMAL(4,2),
                 score DECIMAL(3,1),

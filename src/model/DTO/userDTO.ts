@@ -4,6 +4,8 @@
  *  schemas:
  *      UserDTO:
  *          properties:
+ *              username:
+ *                  type: string
  *              name:
  *                  type: string
  *              surname:
@@ -14,30 +16,33 @@
  *                  type: string
  *              password:
  *                  type: string
- *              is_active:
- *                  type: boolean
+ *              role:
+ *                  type: string
  */
 export class UserDTO {
+    username: string
     name: string
     surname: string
     birth_date: number
     email: string
     password: string
-    is_active: boolean
+    role: string
 
     constructor(
+        username: string,
         name: string,
         surname: string,
         birth_date: number,
         email: string,
         password: string,
-        is_active: boolean
+        role: string
     ) {
+        this.username = username
         this.name = name
         this.surname = surname
         this.birth_date = birth_date
         this.email = email
         this.password = password
-        this.is_active = is_active
+        this.role = role
     }
 }

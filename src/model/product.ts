@@ -13,7 +13,9 @@ import { Publication } from "./publication"
  *                  format: uuid
  *              name:
  *                  type: string
- *              date:
+ *              created:
+ *                  type: number
+ *              updated:
  *                  type: number
  *              in_menu:
  *                  type: boolean
@@ -29,7 +31,8 @@ import { Publication } from "./publication"
 export class Product {
     id: UUID
     name: string
-    date: number
+    created: number
+    updated: number | null
     in_menu: boolean
     price: number
     score: number
@@ -39,7 +42,8 @@ export class Product {
     constructor(
         id: UUID,
         name: string,
-        date: number,
+        created: number,
+        updated: number | null,
         in_menu: boolean,
         price: number,
         score: number,
@@ -48,7 +52,8 @@ export class Product {
     ) {
         this.id = id
         this.name = name
-        this.date = date
+        this.created = created
+        this.updated = updated
         this.in_menu = in_menu
         this.price = price
         this.score = score
@@ -60,7 +65,8 @@ export class Product {
         return [
             this.id,
             this.name,
-            this.date,
+            this.created,
+            this.updated,
             this.in_menu,
             this.price,
             this.score,
