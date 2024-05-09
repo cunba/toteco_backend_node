@@ -14,13 +14,14 @@ export const productsRepository: IProductsRepository = {
                 `INSERT INTO ${schemaName}(
                     id,
                     name,
-                    date,
+                    created,
+                    updated,
                     in_menu,
                     price,
                     score,
                     publication_id,
                     menu_id
-                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8)`, product.toArray()
+                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`, product.toArray()
             )
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'New Product data created'))
@@ -38,13 +39,14 @@ export const productsRepository: IProductsRepository = {
                 `INSERT INTO ${schemaName}(
                     id,
                     name,
-                    date,
+                    created,
+                    updated,
                     in_menu,
                     price,
                     score,
                     publication_id,
                     menu_id
-                ) VALUES($1, $2, $3, $4, $5, $6)`, product.toArray()
+                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`, product.toArray()
             )
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Product found by name'))

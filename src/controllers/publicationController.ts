@@ -3,37 +3,37 @@ import { randomUUID, UUID } from "crypto"
 import { Router } from "express"
 import { body, ValidationError, validationResult } from "express-validator"
 import { apiLog, error, info } from "../constants/constants"
-import { ProductDTO } from "../model/DTO/productDTO"
+import { PublicationDTO } from "../model/DTO/publicationDTO"
+import { Establishment } from "../model/establishment"
 import { Exception } from "../model/exception"
 import { Menu } from "../model/menu"
-import { Product } from "../model/product"
 import { Publication } from "../model/publication"
-import { menusRepository } from "../repository/menus/menusRepository"
-import { productsRepository } from "../repository/products/productsRepository"
+import { establishmentsRepository } from "../repository/establishments/establishmentsRepository"
 import { publicationsRepository } from "../repository/publications/publicationsRepository"
+import { usersRepository } from "../repository/users/usersRepository"
 
-const productsControllerRouter = Router()
+const publicationsControllerRouter = Router()
 
 /**
  * @openapi
- * /products:
+ * /publications:
  *  post:
- *      description: Create new product
- *      operationId: saveProduct
+ *      description: Create new publication
+ *      operationId: savePublication
  *      tags:
- *      - Products
+ *      - Publications
  *      requestBody:
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#/components/schemas/ProductDTO'
+ *                      $ref: '#/components/schemas/PublicationDTO'
  *      responses:
  *          201:
  *              description: CREATED
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Product'
+ *                          $ref: '#/components/schemas/Publication'
  *          400:
  *              description: BAD REQUEST
  *              content:
@@ -53,14 +53,14 @@ const productsControllerRouter = Router()
  *                      schema:
  *                          $ref: '#/components/schemas/Exception'
  */
-productsControllerRouter.post('/products', json(),
-    body('name').trim().notEmpty(),
-    body('in_menu').notEmpty(),
-    body('publication_id').trim().notEmpty(),
-    body('price').trim().isNumeric(),
-    body('score').trim().isNumeric(),
+publicationsControllerRouter.post('/publications', json(),
+    body('total_price').trim().notEmpty(),
+    body('total_score').trim().notEmpty(),
+    body('photo').trim().notEmpty(),
+    body('establishment_id').trim().notEmpty(),
+    body('user_id').trim().notEmpty(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'New product request:'))
+        console.log(info(), apiLog('Api', '\t', 'New publication request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
 
         const errors: any = validationResult(req)
@@ -73,55 +73,54 @@ productsControllerRouter.post('/products', json(),
                     exception.errors?.set(e.param, 'required but not provided')
                 }
             })
-            console.log(error(), apiLog('Api', '\t', 'New product request', 'validation error:'))
+            console.log(error(), apiLog('Api', '\t', 'New publication request', 'validation error:'))
             console.log('\t\t', apiLog(JSON.stringify(exception)))
 
             return res.status(400).send(exception)
         }
 
-        const productDTO = req.body as ProductDTO
+        const publicationDTO = req.body as PublicationDTO
 
-        let publication: any
-        if (productDTO.publication_id) {
+        let establishment: any
+        if (publicationDTO.establishment_id) {
             try {
-                publication = await publicationsRepository.findById(productDTO.publication_id)
+                establishment = await establishmentsRepository.findById(publicationDTO.establishment_id)
             } catch (err: any) {
                 return res.status(404).send(err.message ?? 'Publication not found exception')
             }
 
-            if (!(publication instanceof Publication)) {
+            if (!(establishment instanceof Establishment)) {
                 return res.status(404).send('Publication not found exception')
             }
         }
 
-        let menu: any
-        if (productDTO.menu_id) {
+        let user: any
+        if (publicationDTO.user_id) {
             try {
-                menu = await menusRepository.findById(productDTO.menu_id!)
+                user = await usersRepository.findById(publicationDTO.user_id!)
             } catch (err: any) {
                 return res.status(404).send(err.message ?? 'Menu not found exception')
             }
 
-            if (!(menu instanceof Menu)) {
+            if (!(user instanceof Menu)) {
                 return res.status(404).send('Menu not found exception')
             }
         }
 
-        const product = new Product(
+        const publication = new Publication(
             randomUUID(),
-            productDTO.name,
             new Date().getTime(),
             null,
-            productDTO.in_menu,
-            productDTO.price ?? 0,
-            productDTO.score!,
-            publication,
-            menu
+            publicationDTO.total_price,
+            publicationDTO.total_score,
+            publicationDTO.photo,
+            establishment,
+            user
         )
 
         try {
-            await productsRepository.save(product)
-            return res.status(201).send(product)
+            await publicationsRepository.save(publication)
+            return res.status(201).send(publication)
         } catch (err: any) {
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
         }
@@ -130,17 +129,17 @@ productsControllerRouter.post('/products', json(),
 
 /**
  * @openapi
- * /products:
+ * /publications:
  *  put:
- *      description: Update product
- *      operationId: updateProduct
+ *      description: Update publication
+ *      operationId: updatePublication
  *      tags:
- *      - Products
+ *      - Publications
  *      requestBody:
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#/components/schemas/Product'
+ *                      $ref: '#/components/schemas/Publication'
  *      responses:
  *          200:
  *              description: SUCCESS
@@ -174,14 +173,14 @@ productsControllerRouter.post('/products', json(),
  *                      schema:
  *                          $ref: '#/components/schemas/Exception'
  */
-productsControllerRouter.put('/products', json(),
-    body('name').trim().notEmpty(),
-    body('in_menu').notEmpty(),
-    body('publication_id').trim().notEmpty(),
-    body('price').trim().isNumeric(),
-    body('score').trim().isNumeric(),
+publicationsControllerRouter.put('/publications', json(),
+    body('total_price').trim().notEmpty(),
+    body('total_score').trim().notEmpty(),
+    body('photo').trim().notEmpty(),
+    body('establishment_id').trim().notEmpty(),
+    body('user_id').trim().notEmpty(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'Update product request:'))
+        console.log(info(), apiLog('Api', '\t', 'Update publication request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
 
         const errors: any = validationResult(req)
@@ -194,22 +193,22 @@ productsControllerRouter.put('/products', json(),
                     exception.errors?.set(e.param, 'required but not provided')
                 }
             })
-            console.log(error(), apiLog('Api', '\t', 'New product request', 'validation error:'))
+            console.log(error(), apiLog('Api', '\t', 'New publication request', 'validation error:'))
             console.log('\t\t', apiLog(JSON.stringify(exception)))
 
             return res.status(400).send(exception)
         }
 
-        const product = req.body as Product
+        const publication = req.body as Publication
 
         try {
-            await productsRepository.findById(product.id)
+            await publicationsRepository.findById(publication.id)
         } catch (err: any) {
             return res.status(404).send(err.message ?? 'Not found exception')
         }
 
         try {
-            const response = await productsRepository.update(product)
+            const response = await publicationsRepository.update(publication)
             return res.status(200).send(response)
         } catch (err: any) {
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -218,12 +217,12 @@ productsControllerRouter.put('/products', json(),
 
 /**
  * @openapi
- * /products:
+ * /publications:
  *  delete:
- *      description: Delete all products
- *      operationId: deleteAllProduct
+ *      description: Delete all publications
+ *      operationId: deleteAllPublication
  *      tags:
- *      - Products
+ *      - Publications
  *      responses:
  *          200:
  *              description: SUCCESS
@@ -251,9 +250,9 @@ productsControllerRouter.put('/products', json(),
  *                      schema:
  *                          $ref: '#/components/schemas/Exception'
  */
-productsControllerRouter.delete('/products', json(), async (req, res) => {
+publicationsControllerRouter.delete('/publications', json(), async (req, res) => {
     try {
-        const response = await productsRepository.deleteAll()
+        const response = await publicationsRepository.deleteAll()
         return res.status(200).send(response)
     } catch (err: any) {
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -262,12 +261,12 @@ productsControllerRouter.delete('/products', json(), async (req, res) => {
 
 /**
  * @openapi
- * /products/id/{id}:
+ * /publications/id/{id}:
  *  get:
- *      description: Get product by id
- *      operationId: getProductById
+ *      description: Get publication by id
+ *      operationId: getPublicationById
  *      tags:
- *      - Products
+ *      - Publications
  *      parameters:
  *          - in: path
  *            name: id
@@ -281,7 +280,7 @@ productsControllerRouter.delete('/products', json(), async (req, res) => {
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Product'
+ *                          $ref: '#/components/schemas/Publication'
  *          400:
  *              description: BAD REQUEST
  *              content:
@@ -301,9 +300,9 @@ productsControllerRouter.delete('/products', json(), async (req, res) => {
  *                      schema:
  *                          $ref: '#/components/schemas/Exception'
  */
-productsControllerRouter.get('/products/id/:id', json(), async (req, res) => {
+publicationsControllerRouter.get('/publications/id/:id', json(), async (req, res) => {
     try {
-        const response = await productsRepository.findById(req.params.id as UUID)
+        const response = await publicationsRepository.findById(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
         console.log(err)
@@ -313,12 +312,12 @@ productsControllerRouter.get('/products/id/:id', json(), async (req, res) => {
 
 /**
  * @openapi
- * /products:
+ * /publications:
  *  get:
- *      description: Get all products
- *      operationId: getAllProduct
+ *      description: Get all publications
+ *      operationId: getAllPublication
  *      tags:
- *      - Products
+ *      - Publications
  *      responses:
  *          200:
  *              description: SUCCESS
@@ -327,7 +326,7 @@ productsControllerRouter.get('/products/id/:id', json(), async (req, res) => {
  *                      schema:
  *                          type: array
  *                          items:
- *                              $ref: '#/components/schemas/Product'
+ *                              $ref: '#/components/schemas/Publication'
  *          400:
  *              description: BAD REQUEST
  *              content:
@@ -347,9 +346,9 @@ productsControllerRouter.get('/products/id/:id', json(), async (req, res) => {
  *                      schema:
  *                          $ref: '#/components/schemas/Exception'
  */
-productsControllerRouter.get('/products', json(), async (req, res) => {
+publicationsControllerRouter.get('/publications', json(), async (req, res) => {
     try {
-        const response = await productsRepository.findAll()
+        const response = await publicationsRepository.findAll()
         return res.status(200).send(response)
     } catch (err: any) {
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -358,12 +357,12 @@ productsControllerRouter.get('/products', json(), async (req, res) => {
 
 /**
  * @openapi
- * /products/publication/{id}:
+ * /publications/establishment/{id}:
  *  get:
- *      description: Get products by publication ID
- *      operationId: getProductsByPublicationId
+ *      description: Get publications by establishment ID
+ *      operationId: getPublicationsByEstablishmentId
  *      tags:
- *      - Products
+ *      - Publications
  *      parameters:
  *          - in: path
  *            name: id
@@ -379,7 +378,7 @@ productsControllerRouter.get('/products', json(), async (req, res) => {
  *                      schema:
  *                          type: array
  *                          items:
- *                              $ref: '#/components/schemas/Product'
+ *                              $ref: '#/components/schemas/Publication'
  *          400:
  *              description: BAD REQUEST
  *              content:
@@ -399,9 +398,9 @@ productsControllerRouter.get('/products', json(), async (req, res) => {
  *                      schema:
  *                          $ref: '#/components/schemas/Exception'
  */
-productsControllerRouter.get('/products/publication/:id', json(), async (req, res) => {
+publicationsControllerRouter.get('/publications/establishment/:id', json(), async (req, res) => {
     try {
-        const response = await productsRepository.findByPublication(req.params.id as UUID)
+        const response = await publicationsRepository.findByEstablishment(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -410,12 +409,12 @@ productsControllerRouter.get('/products/publication/:id', json(), async (req, re
 
 /**
  * @openapi
- * /products/menu/{id}:
+ * /publications/user/{id}:
  *  get:
- *      description: Get products by menu ID
- *      operationId: getProductsByMenuId
+ *      description: Get publications by user ID
+ *      operationId: getPublicationsByUserId
  *      tags:
- *      - Products
+ *      - Publications
  *      parameters:
  *          - in: path
  *            name: id
@@ -431,7 +430,7 @@ productsControllerRouter.get('/products/publication/:id', json(), async (req, re
  *                      schema:
  *                          type: array
  *                          items:
- *                              $ref: '#/components/schemas/Product'
+ *                              $ref: '#/components/schemas/Publication'
  *          400:
  *              description: BAD REQUEST
  *              content:
@@ -451,13 +450,13 @@ productsControllerRouter.get('/products/publication/:id', json(), async (req, re
  *                      schema:
  *                          $ref: '#/components/schemas/Exception'
  */
-productsControllerRouter.get('/products/menu/:id', json(), async (req, res) => {
+publicationsControllerRouter.get('/publications/user/:id', json(), async (req, res) => {
     try {
-        const response = await productsRepository.findByMenu(req.params.id as UUID)
+        const response = await publicationsRepository.findByUser(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
 
-export default productsControllerRouter
+export default publicationsControllerRouter
