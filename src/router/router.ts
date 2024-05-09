@@ -17,22 +17,16 @@ export const routerClient = () => {
 
     const clientAuthMiddleware = () => (req: any, res: any, next: any) => {
         try {
-            // Get the Certificate the User provided
-            let cert = req.socket.getPeerCertificate();
-            // The Certificate is VALID
-            if (req.client.authorized) {
-                console.log(info(), apiLog(`Certificate "${cert.subject.CN}" is VALID and was issued by "${cert.issuer.CN}"`))
+            let url = req.url
+            let method = req.method
+            let token = req.headers.authorization.trim()
+
+            if (token !== undefined || token !== null || token !== "") {
+                console.log(info(), apiLog('Token provided'))
                 next();
-            }
-            // The Certificate is NOT VALID
-            else if (cert.subject) {
-                console.log(info(), apiLog(`Certificates from "${cert.issuer.CN}" are NOT VALID. User "${cert.subject.CN}"`))
+            } else {
+                console.log(info(), apiLog(`No token provided`))
                 res.sendStatus(401);
-            }
-            // A Certificate was NOT PROVIDED
-            else {
-                console.log(info(), apiLog(`No Certificate provided by the client`))
-                res.status(403).send(`Certificate Required`)
             }
         } catch (err: any) {
             res.sendStatus(404)

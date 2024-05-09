@@ -4,7 +4,7 @@ import { UUID } from "crypto"
  * @openapi
  * components:
  *  schemas:
- *      UpdatePasswordDTO:
+ *      UpdatePassword:
  *          properties:
  *              id:
  *                  type: string
@@ -12,7 +12,7 @@ import { UUID } from "crypto"
  *              password:
  *                  type: string
  */
-export class UpdatePasswordDTO {
+export class UpdatePassword {
     id: UUID
     password: string
 

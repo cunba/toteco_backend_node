@@ -1,6 +1,5 @@
 import { UUID } from "crypto"
 import { Exception } from "../../model/exception"
-import { RecoverAccount } from "../../model/recoverAccount"
 import { User } from "../../model/user"
 import { IRepositery } from "../iRepository"
 

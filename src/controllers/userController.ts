@@ -2,12 +2,14 @@ import { json } from "body-parser"
 import { randomUUID, UUID } from "crypto"
 import { Router } from "express"
 import { body, ValidationError, validationResult } from "express-validator"
+import { decode } from "jsonwebtoken"
 import { apiLog, error, info } from "../constants/constants"
-import { UpdatePasswordDTO } from "../model/DTO/updatePasswordDTO"
 import { UserDTO } from "../model/DTO/userDTO"
 import { Exception } from "../model/exception"
-import { RecoverAccount } from "../model/recoverAccount"
+import { RecoverAccount } from "../model/utils/recoverAccount"
 import { User } from "../model/user"
+import { TokenPayload } from "../model/utils/tokenPayload"
+import { UpdatePassword } from "../model/utils/updatePassword"
 import { usersRepository } from "../repository/users/usersRepository"
 
 const usersControllerRouter = Router()
@@ -202,7 +204,7 @@ usersControllerRouter.put('/users', json(),
  * /users:
  *  delete:
  *      description: Delete all users
- *      operationId: deleteAllUser
+ *      operationId: deleteAllUsers
  *      tags:
  *      - Users
  *      responses:
@@ -423,9 +425,11 @@ usersControllerRouter.get('/users/email/:email', json(), async (req, res) => {
  *                      schema:
  *                          $ref: '#/components/schemas/Exception'
  */
-usersControllerRouter.get('/users/email/:email', json(), async (req, res) => {
+usersControllerRouter.get('/users/logged', json(), async (req, res) => {
     try {
-        const response = await usersRepository.findByEmail(req.params.email)
+        let token = req.headers.authorization
+        const tokenPayload = decode(token!) as TokenPayload
+        const response = await usersRepository.findById(tokenPayload.id)
         return res.status(200).send(response)
     } catch (err: any) {
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -751,7 +755,7 @@ usersControllerRouter.patch('/users/update-publications-number/:id', json(), asy
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#/components/schemas/UpdatePasswordDTO'
+ *                      $ref: '#/components/schemas/UpdatePassword'
  *      responses:
  *          200:
  *              description: SUCCESS
@@ -798,7 +802,7 @@ usersControllerRouter.get('/users/update-password', json(),
             return res.status(400).send(exception)
         }
 
-        const updatePassword = req.body as UpdatePasswordDTO
+        const updatePassword = req.body as UpdatePassword
 
         try {
             await usersRepository.findById(updatePassword.id)
