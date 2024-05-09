@@ -54,7 +54,10 @@ const productsControllerRouter = Router()
  */
 productsControllerRouter.post('/products', json(),
     body('name').trim().notEmpty(),
-    body('location').trim().notEmpty(),
+    body('in_menu').notEmpty(),
+    body('publication_id').trim().notEmpty(),
+    body('price').trim().isNumeric(),
+    body('score').trim().isNumeric(),
     async (req, res) => {
         console.log(info(), apiLog('Api', '\t', 'New product request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
@@ -84,7 +87,7 @@ productsControllerRouter.post('/products', json(),
             } catch (err: any) {
                 return res.status(404).send(err.message ?? 'Publication not found exception')
             }
-    
+
             if (!(publication instanceof Publication)) {
                 return res.status(404).send('Publication not found exception')
             }
@@ -107,6 +110,7 @@ productsControllerRouter.post('/products', json(),
             randomUUID(),
             productDTO.name,
             new Date().getTime(),
+            null,
             productDTO.in_menu,
             productDTO.price ?? 0,
             productDTO.score!,
@@ -170,10 +174,11 @@ productsControllerRouter.post('/products', json(),
  *                          $ref: '#/components/schemas/Exception'
  */
 productsControllerRouter.put('/products', json(),
-    body('id').trim().notEmpty(),
     body('name').trim().notEmpty(),
-    body('location').trim().notEmpty(),
-    body('score').notEmpty(),
+    body('in_menu').notEmpty(),
+    body('publication_id').trim().notEmpty(),
+    body('price').trim().isNumeric(),
+    body('score').trim().isNumeric(),
     async (req, res) => {
         console.log(info(), apiLog('Api', '\t', 'Update product request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
@@ -344,6 +349,110 @@ productsControllerRouter.get('/products/id/:id', json(), async (req, res) => {
 productsControllerRouter.get('/products', json(), async (req, res) => {
     try {
         const response = await productsRepository.findAll()
+        return res.status(200).send(response)
+    } catch (err: any) {
+        return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
+    }
+})
+
+/**
+ * @openapi
+ * /products/publication/{id}:
+ *  get:
+ *      description: Get products by menu ID
+ *      operationId: getProductsByPublicationId
+ *      tags:
+ *      - Products
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            required: true
+ *            schema:
+ *                type: string
+ *                format: uuid
+ *      responses:
+ *          200:
+ *              description: SUCCESS
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Product'
+ *          400:
+ *              description: BAD REQUEST
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Exception'
+ *          401:
+ *              description: UNAUTHORIZED
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Exception'
+ *          500:
+ *              description: INTERNAL SERVER ERROR
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Exception'
+ */
+productsControllerRouter.get('/products/publication/:id', json(), async (req, res) => {
+    try {
+        const response = await productsRepository.findByPublication(req.params.id as UUID)
+        return res.status(200).send(response)
+    } catch (err: any) {
+        return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
+    }
+})
+
+/**
+ * @openapi
+ * /products/menu/{id}:
+ *  get:
+ *      description: Get products by menu ID
+ *      operationId: getProductsByMenuId
+ *      tags:
+ *      - Products
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            required: true
+ *            schema:
+ *                type: string
+ *                format: uuid
+ *      responses:
+ *          200:
+ *              description: SUCCESS
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Product'
+ *          400:
+ *              description: BAD REQUEST
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Exception'
+ *          401:
+ *              description: UNAUTHORIZED
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Exception'
+ *          500:
+ *              description: INTERNAL SERVER ERROR
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Exception'
+ */
+productsControllerRouter.get('/products/menu/:id', json(), async (req, res) => {
+    try {
+        const response = await productsRepository.findByMenu(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
