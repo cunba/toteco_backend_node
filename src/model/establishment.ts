@@ -11,7 +11,9 @@ import { Publication } from "./publication"
  *                  type: number
  *              name:
  *                  type: string
- *              creation_date:
+ *              created:
+ *                  type: number
+ *              updated:
  *                  type: number
  *              location:
  *                  type: string
@@ -27,7 +29,8 @@ import { Publication } from "./publication"
 export class Establishment {
     id: UUID
     name: string
-    creation_date: number
+    created: number
+    updated: number | null
     location: string
     is_open: boolean
     score: number
@@ -36,7 +39,8 @@ export class Establishment {
     constructor(
         id: UUID,
         name: string,
-        creation_date: number,
+        created: number,
+        updated: number | null,
         location: string,
         is_open: boolean,
         score: number,
@@ -44,7 +48,8 @@ export class Establishment {
     ) {
         this.id = id
         this.name = name
-        this.creation_date = creation_date
+        this.created = created
+        this.updated = updated
         this.location = location
         this.is_open = is_open
         this.score = score
@@ -55,7 +60,8 @@ export class Establishment {
         return [
             this.id,
             this.name,
-            this.creation_date,
+            this.created,
+            this.updated,
             this.location,
             this.is_open,
             this.score

@@ -11,7 +11,9 @@ import { User } from "./user"
  *              id:
  *                  type: string
  *                  format: uuid
- *              date:
+ *              created:
+ *                  type: number
+ *              updated:
  *                  type: number
  *              total_price:
  *                  type: number
@@ -26,7 +28,8 @@ import { User } from "./user"
  */
 export class Publication {
     id: UUID
-    date: number
+    created: number
+    updated: number | null
     total_price: number
     total_score: number
     photo: any
@@ -35,7 +38,8 @@ export class Publication {
 
     constructor(
         id: UUID,
-        date: number,
+        created: number,
+        updated: number | null,
         total_price: number,
         total_score: number,
         photo: any,
@@ -43,7 +47,8 @@ export class Publication {
         user: User
     ) {
         this.id = id
-        this.date = date
+        this.created = created
+        this.updated = updated
         this.total_price = total_price
         this.total_score = total_score
         this.photo = photo
@@ -54,7 +59,8 @@ export class Publication {
     toArray() {
         return [
             this.id,
-            this.date,
+            this.created,
+            this.updated,
             this.total_price,
             this.total_score,
             this.photo,

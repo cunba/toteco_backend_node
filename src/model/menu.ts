@@ -10,7 +10,9 @@ import { Product } from "./product"
  *              id:
  *                  type: string
  *                  format: uuid
- *              date:
+ *              created:
+ *                  type: number
+ *              updated:
  *                  type: number
  *              price:
  *                  type: number
@@ -23,19 +25,22 @@ import { Product } from "./product"
  */
 export class Menu {
     id: UUID
-    date: number
+    created: number
+    updated: number | null
     price: number
     score: number
     products?: Product[]
 
     constructor(
         id: UUID,
-        date: number,
+        created: number,
+        updated: number | null,
         price: number,
         score: number
     ) {
         this.id = id
-        this.date = date
+        this.created = created
+        this.updated = updated
         this.price = price
         this.score = score
     }
@@ -43,7 +48,8 @@ export class Menu {
     toArray() {
         return [
             this.id,
-            this.date,
+            this.created,
+            this.updated,
             this.price,
             this.score
         ]
