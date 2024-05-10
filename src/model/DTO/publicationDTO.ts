@@ -11,11 +11,13 @@ import { UUID } from "crypto"
  *              total_score:
  *                  type: number
  *              photo:
- *                  type: any
+ *                  type: string
  *              establishment_id:
- *                  type: number
+ *                  type: string
+ *                  format: uuid
  *              user_id:
- *                  type: number
+ *                  type: string
+ *                  format: uuid
  */
 export class PublicationDTO {
     total_price: number

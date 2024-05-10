@@ -20,7 +20,7 @@ import { User } from "./user"
  *              total_score:
  *                  type: number
  *              photo:
- *                  type: any
+ *                  type: string
  *              establishment:
  *                  $ref: '#/components/schemas/Establishment'
  *              user:

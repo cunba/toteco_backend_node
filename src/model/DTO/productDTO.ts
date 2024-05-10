@@ -16,8 +16,10 @@ import { UUID } from "crypto"
  *                  type: number
  *              menu_id:
  *                  type: string
+ *                  format: uuid
  *              publication_id:
- *                  type: number
+ *                  type: string
+ *                  format: uuid
  */
 export class ProductDTO {
     name: string

@@ -27,7 +27,7 @@ export const apiClient = () => {
         definition: {
             openapi: '3.0.2',
             info: {
-                title: 'GATEWAY SERVICE',
+                title: 'TOTECO SERVICE',
                 version: '1.0.0',
                 contact: {
                     name: 'Irene Cunto',

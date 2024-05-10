@@ -8,7 +8,8 @@ import { Publication } from "./publication"
  *      Establishment:
  *          properties:
  *              id:
- *                  type: number
+ *                  type: string
+ *                  format: uuid
  *              name:
  *                  type: string
  *              created:
