@@ -58,7 +58,7 @@ export const publicationsRepository: IPublicationsRepository = {
 
     delete: async function (id: UUID): Promise<number | Exception> {
         return await pool
-            .query(`DELETE FROM ${schemaName} WHERE id = ${id}`)
+            .query(`DELETE FROM ${schemaName} WHERE id = $1`, [id])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', id, '\t', 'Publication deleted'))
                 return res.rowCount
@@ -84,8 +84,11 @@ export const publicationsRepository: IPublicationsRepository = {
 
     findById: async function (id: UUID): Promise<Publication | Exception> {
         return await pool
-            .query(`SELECT * FROM ${schemaName} WHERE name = ${id}`)
+            .query(`SELECT * FROM ${schemaName} WHERE id = $1`, [id])
             .then((res: any) => {
+                if (res.rows.length === 0) {
+                    throw new Exception(404, 'Not found exception')
+                }
                 console.log(info(), postgresLog('Postgre', `Publication found by id ${id}`))
                 return res.rows[0] as Publication
             })
@@ -99,7 +102,7 @@ export const publicationsRepository: IPublicationsRepository = {
 
     findByEstablishment: async function (establishmentId: string): Promise<Exception | Publication[]> {
         return await pool
-            .query(`SELECT * FROM ${schemaName} WHERE establishment_id = ${establishmentId}`)
+            .query(`SELECT * FROM ${schemaName} WHERE establishment_id = $1`, [establishmentId])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Publications found by establishment ID'))
                 return res.rows as Publication[]
@@ -112,7 +115,7 @@ export const publicationsRepository: IPublicationsRepository = {
 
     findByUser: async function (userId: string): Promise<Exception | Publication[]> {
         return await pool
-            .query(`SELECT * FROM ${schemaName} WHERE user_id = ${userId}`)
+            .query(`SELECT * FROM ${schemaName} WHERE user_id = $1`, [userId])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Publications found by user ID'))
                 return res.rows as Publication[]

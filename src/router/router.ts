@@ -1,4 +1,5 @@
 import { Router } from "express"
+import { JwtPayload, verify } from "jsonwebtoken"
 import { apiLog, info } from "../constants/constants"
 import establishmentsControllerRouter from "../controllers/establishmentsController"
 import loginControllerRouter from "../controllers/loginController"
@@ -6,6 +7,7 @@ import menusControllerRouter from "../controllers/menuController"
 import productsControllerRouter from "../controllers/productController"
 import publicationsControllerRouter from "../controllers/publicationController"
 import usersControllerRouter from "../controllers/userController"
+import { usersRepository } from "../repository/users/usersRepository"
 
 /**
  * This client creates the router configuration base on the environments provided
@@ -20,22 +22,33 @@ export const routerClient = () => {
         next()
     })
 
-    const clientAuthMiddleware = () => (req: any, res: any, next: any) => {
+    const clientAuthMiddleware = () => async (req: any, res: any, next: any) => {
         try {
             const url = req.url
-            console.log(url)
-            const token = req.headers.authorization.trim()
-            console.log(token)
+            const method = req.method
+            const token = req.headers.authorization
 
-            if (token !== undefined || token !== null || token !== "") {
+            if (url === '/Toteco/users' && method === 'POST') {
+                console.log(info(), apiLog('Create user, no authorization needed'))
+                next();
+            } else if (token !== undefined && token !== null && token !== "") {
                 console.log(info(), apiLog('Token provided'))
+                const tokenInfo = verify(token.replace('Bearer ', ''), 'toteco') as JwtPayload
+                const userInfo = JSON.parse(tokenInfo.data)
+                try {
+                    await usersRepository.findById(userInfo.id)
+                } catch (err: any) {
+                    return res.sendStatus(401)
+                }
+                console.log(info(), apiLog('Token valid'))
                 next();
             } else {
                 console.log(info(), apiLog(`No token provided`))
-                res.sendStatus(401);
+                return res.sendStatus(401);
             }
         } catch (err: any) {
-            res.sendStatus(404)
+            console.log(err)
+            return res.sendStatus(401)
         }
     }
 

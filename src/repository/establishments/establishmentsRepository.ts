@@ -32,7 +32,7 @@ export const establishmentsRepository: IEstablishmentsRepository = {
 
     findByName: async function (name: string): Promise<Exception | Establishment[]> {
         return await pool
-            .query(`SELECT * FROM ${schemaName} WHERE name = ${name}`)
+            .query(`SELECT * FROM ${schemaName} WHERE name = $1`, [name])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Establishment found by name'))
                 return res.rows as Establishment[]
@@ -67,7 +67,7 @@ export const establishmentsRepository: IEstablishmentsRepository = {
 
     delete: async function (id: UUID): Promise<number | Exception> {
         return await pool
-            .query(`DELETE FROM ${schemaName} WHERE id = ${id}`)
+            .query(`DELETE FROM ${schemaName} WHERE id = $1`, [id])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', id, '\t', 'Establishment deleted'))
                 return res.rowCount
@@ -93,8 +93,11 @@ export const establishmentsRepository: IEstablishmentsRepository = {
 
     findById: async function (id: UUID): Promise<Establishment | Exception> {
         return await pool
-            .query(`SELECT * FROM ${schemaName} WHERE name = ${id}`)
+            .query(`SELECT * FROM ${schemaName} WHERE id = $1`, [id])
             .then((res: any) => {
+                if (res.rows.length === 0) {
+                    throw new Exception(404, 'Not found exception')
+                }
                 console.log(info(), postgresLog('Postgre', `Establishment found by id ${id}`))
                 return res.rows[0] as Establishment
             })

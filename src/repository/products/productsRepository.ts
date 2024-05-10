@@ -60,7 +60,7 @@ export const productsRepository: IProductsRepository = {
 
     delete: async function (id: UUID): Promise<number | Exception> {
         return await pool
-            .query(`DELETE FROM ${schemaName} WHERE id = ${id}`)
+            .query(`DELETE FROM ${schemaName} WHERE id = $1`, [id])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', id, '\t', 'Product deleted'))
                 return res.rowCount
@@ -86,8 +86,11 @@ export const productsRepository: IProductsRepository = {
 
     findById: async function (id: UUID): Promise<Product | Exception> {
         return await pool
-            .query(`SELECT * FROM ${schemaName} WHERE name = ${id}`)
+            .query(`SELECT * FROM ${schemaName} WHERE id = $1`, [id])
             .then((res: any) => {
+                if (res.rows.length === 0) {
+                    throw new Exception(404, 'Not found exception')
+                }
                 console.log(info(), postgresLog('Postgre', `Product found by id ${id}`))
                 return res.rows[0] as Product
             })
@@ -101,7 +104,7 @@ export const productsRepository: IProductsRepository = {
 
     findByMenu: async function (menuId: string): Promise<Exception | Product[]> {
         return await pool
-            .query(`SELECT * FROM ${schemaName} WHERE menu_id = ${menuId}`)
+            .query(`SELECT * FROM ${schemaName} WHERE menu_id = $1`, [menuId])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Products found by menu ID'))
                 return res.rows as Product[]
@@ -114,7 +117,7 @@ export const productsRepository: IProductsRepository = {
 
     findByPublication: async function (publicationId: string): Promise<Exception | Product[]> {
         return await pool
-            .query(`SELECT * FROM ${schemaName} WHERE publication_id = ${publicationId}`)
+            .query(`SELECT * FROM ${schemaName} WHERE publication_id = $1`, [publicationId])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Products found by publication ID'))
                 return res.rows as Product[]

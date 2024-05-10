@@ -70,39 +70,35 @@ loginControllerRouter.post('/login', json(),
         const loginRequest = req.body as LoginRequest
 
         try {
-            const user = await usersRepository.findByUsername(loginRequest.username)
-            if (user instanceof Exception) {
-                return res.status(user.code).send(user)
-            } else {
+            let user = await usersRepository.findByUsername(loginRequest.username)
+            if (!(user instanceof Exception) && user.length > 0) {
                 console.log(user[0].password)
                 console.log(loginRequest.password)
                 if (user[0].password === loginRequest.password) {
-                    const token = sign(new TokenPayload(user[0].id, user[0].username, user[0].email, user[0].role), 'toteco')
+                    const tokenPayload = new TokenPayload(user[0].id, user[0].username, user[0].email, user[0].role)
+                    const token = sign({data: JSON.stringify(tokenPayload)}, 'toteco', {expiresIn: '24h'})
                     const loginResponse = new LoginResponse(token)
                     return res.status(200).send(loginResponse)
                 } else {
                     return res.status(401).send(new Exception(400, 'Invalid password'))
                 }
-            }
-        } catch (err: any) {
-            try {
-                const user = await usersRepository.findByEmail(loginRequest.username)
-                if (user instanceof Exception) {
-                    return res.status(user.code).send(user)
-                } else {
+            } else {
+                user = await usersRepository.findByEmail(loginRequest.username)
+                if (!(user instanceof Exception)) {
                     console.log(user[0].password)
                     console.log(loginRequest.password)
                     if (user[0].password === loginRequest.password) {
-                        const token = sign(new TokenPayload(user[0].id, user[0].username, user[0].email, user[0].role), 'toteco')
+                        const tokenPayload = new TokenPayload(user[0].id, user[0].username, user[0].email, user[0].role)
+                        const token = sign({data: JSON.stringify(tokenPayload)}, 'toteco', {expiresIn: '24h'})
                         const loginResponse = new LoginResponse(token)
                         return res.status(200).send(loginResponse)
                     } else {
                         return res.status(401).send(new Exception(400, 'Invalid password'))
                     }
                 }
-            } catch (err: any) {
-                return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
             }
+        } catch (err: any) {
+            return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
         }
 
     })

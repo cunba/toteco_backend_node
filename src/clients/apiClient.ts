@@ -18,6 +18,7 @@ export const apiClient = () => {
     apis.push('./src/controllers/*Controller.ts')
     apis.push('./src/model/*.ts')
     apis.push('./src/model/DTO/*.ts')
+    apis.push('./src/model/utils/*.ts')
     const url = apiUrl(RESTAPI_PROTOCOL, RESTAPI_HOST, RESTAPI_PORT, RESTAPI_DOMAIN)
     const port = RESTAPI_PORT
 
@@ -34,6 +35,15 @@ export const apiClient = () => {
                 },
                 license: {
                     name: 'MIT License',
+                }
+            },
+            components: {
+                securitySchemes: {
+                    BearerAuth: {
+                        type: 'http',
+                        scheme: 'bearer',
+                        bearerFormat: 'JWT'
+                    }
                 }
             },
             servers: [

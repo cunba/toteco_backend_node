@@ -46,7 +46,7 @@ export const databaseClient = async () => {
                 username VARCHAR(30),
                 name VARCHAR(30),
                 surname VARCHAR(30),
-                birth_date TIMESTAMP,
+                birth_date BIGINT,
                 email VARCHAR(50),
                 password VARCHAR(100),
                 created BIGINT,
@@ -55,7 +55,7 @@ export const databaseClient = async () => {
                 money_spent DECIMAL(8,2),
                 publications_number INTEGER,
                 role VARCHAR(10),
-                recovery_code INTEGER(5) NULL
+                recovery_code NUMERIC(5) NULL
             );`
         )
         .then((res: any) => console.log(info(), postgresLog('Postgre', 'users table created if not exists')))

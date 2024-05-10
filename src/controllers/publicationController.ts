@@ -18,6 +18,8 @@ const publicationsControllerRouter = Router()
  * @openapi
  * /publications:
  *  post:
+ *      security:
+ *      - BearerAuth: []
  *      description: Create new publication
  *      operationId: savePublication
  *      tags:
@@ -131,6 +133,8 @@ publicationsControllerRouter.post('/publications', json(),
  * @openapi
  * /publications:
  *  put:
+ *      security:
+ *      - BearerAuth: []
  *      description: Update publication
  *      operationId: updatePublication
  *      tags:
@@ -219,6 +223,8 @@ publicationsControllerRouter.put('/publications', json(),
  * @openapi
  * /publications:
  *  delete:
+ *      security:
+ *      - BearerAuth: []
  *      description: Delete all publications
  *      operationId: deleteAllPublication
  *      tags:
@@ -314,6 +320,8 @@ publicationsControllerRouter.get('/publications/id/:id', json(), async (req, res
  * @openapi
  * /publications:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get all publications
  *      operationId: getAllPublication
  *      tags:
@@ -359,6 +367,8 @@ publicationsControllerRouter.get('/publications', json(), async (req, res) => {
  * @openapi
  * /publications/establishment/{id}:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get publications by establishment ID
  *      operationId: getPublicationsByEstablishmentId
  *      tags:
@@ -411,6 +421,8 @@ publicationsControllerRouter.get('/publications/establishment/:id', json(), asyn
  * @openapi
  * /publications/user/{id}:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get publications by user ID
  *      operationId: getPublicationsByUserId
  *      tags:

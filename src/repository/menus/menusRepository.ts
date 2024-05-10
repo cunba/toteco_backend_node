@@ -54,7 +54,7 @@ export const menusRepository: IMenusRepository = {
 
     delete: async function (id: UUID): Promise<number | Exception> {
         return await pool
-            .query(`DELETE FROM ${schemaName} WHERE id = ${id}`)
+            .query(`DELETE FROM ${schemaName} WHERE id = $1`, [id])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', id, '\t', 'Menu deleted'))
                 return res.rowCount
@@ -80,8 +80,11 @@ export const menusRepository: IMenusRepository = {
 
     findById: async function (id: UUID): Promise<Menu | Exception> {
         return await pool
-            .query(`SELECT * FROM ${schemaName} WHERE name = ${id}`)
+            .query(`SELECT * FROM ${schemaName} WHERE id = $1`, [id])
             .then((res: any) => {
+                if (res.rows.length === 0) {
+                    throw new Exception(404, 'Not found exception')
+                }
                 console.log(info(), postgresLog('Postgre', `Menu found by id ${id}`))
                 return res.rows[0] as Menu
             })

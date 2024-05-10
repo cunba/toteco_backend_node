@@ -6,8 +6,8 @@ import { decode } from "jsonwebtoken"
 import { apiLog, error, info } from "../constants/constants"
 import { UserDTO } from "../model/DTO/userDTO"
 import { Exception } from "../model/exception"
-import { RecoverAccount } from "../model/utils/recoverAccount"
 import { User } from "../model/user"
+import { RecoverAccount } from "../model/utils/recoverAccount"
 import { TokenPayload } from "../model/utils/tokenPayload"
 import { UpdatePassword } from "../model/utils/updatePassword"
 import { usersRepository } from "../repository/users/usersRepository"
@@ -113,6 +113,8 @@ usersControllerRouter.post('/users', json(),
  * @openapi
  * /users:
  *  put:
+ *      security:
+ *      - BearerAuth: []
  *      description: Update user
  *      operationId: updateUser
  *      tags:
@@ -203,6 +205,8 @@ usersControllerRouter.put('/users', json(),
  * @openapi
  * /users:
  *  delete:
+ *      security:
+ *      - BearerAuth: []
  *      description: Delete all users
  *      operationId: deleteAllUsers
  *      tags:
@@ -247,6 +251,8 @@ usersControllerRouter.delete('/users', json(), async (req, res) => {
  * @openapi
  * /users/id/{id}:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get user by id
  *      operationId: getUserById
  *      tags:
@@ -297,6 +303,8 @@ usersControllerRouter.get('/users/id/:id', json(), async (req, res) => {
  * @openapi
  * /users/username/{username}:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get user by username
  *      operationId: getUserByUsername
  *      tags:
@@ -346,6 +354,8 @@ usersControllerRouter.get('/users/username/:username', json(), async (req, res) 
  * @openapi
  * /users/email/{email}:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get user by email
  *      operationId: getUserByEmail
  *      tags:
@@ -395,6 +405,8 @@ usersControllerRouter.get('/users/email/:email', json(), async (req, res) => {
  * @openapi
  * /users/logged:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get user logged
  *      operationId: getUserLogged
  *      tags:
@@ -440,6 +452,8 @@ usersControllerRouter.get('/users/logged', json(), async (req, res) => {
  * @openapi
  * /users:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get all users
  *      operationId: getAllUser
  *      tags:
@@ -485,6 +499,8 @@ usersControllerRouter.get('/users', json(), async (req, res) => {
  * @openapi
  * /users/recover-account/{email}:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Recover account
  *      operationId: recoverAccount
  *      tags:
@@ -539,6 +555,8 @@ usersControllerRouter.get('/users/recover-account/:email', json(), async (req, r
  * @openapi
  * /users/activate/{id}:
  *  patch:
+ *      security:
+ *      - BearerAuth: []
  *      description: Activate user
  *      operationId: activate
  *      tags:
@@ -588,6 +606,8 @@ usersControllerRouter.patch('/users/activate/:id', json(), async (req, res) => {
  * @openapi
  * /users/disable/{id}:
  *  patch:
+ *      security:
+ *      - BearerAuth: []
  *      description: Disable user
  *      operationId: disable
  *      tags:
@@ -637,6 +657,8 @@ usersControllerRouter.patch('/users/disable/:id', json(), async (req, res) => {
  * @openapi
  * /users/update-money-spent/{id}:
  *  patch:
+ *      security:
+ *      - BearerAuth: []
  *      description: Update money spent
  *      operationId: updateMoneySpent
  *      tags:
@@ -692,6 +714,8 @@ usersControllerRouter.patch('/users/update-money-spent/:id', json(), async (req,
  * @openapi
  * /users/update-publications-number/{id}:
  *  patch:
+ *      security:
+ *      - BearerAuth: []
  *      description: Update number of publications
  *      operationId: updatePublicationsNumber
  *      tags:
@@ -747,6 +771,8 @@ usersControllerRouter.patch('/users/update-publications-number/:id', json(), asy
  * @openapi
  * /users/update-password:
  *  patch:
+ *      security:
+ *      - BearerAuth: []
  *      description: Update password
  *      operationId: updatePassword
  *      tags:

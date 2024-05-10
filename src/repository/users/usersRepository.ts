@@ -24,8 +24,9 @@ export const usersRepository: IUsersRepository = {
                     is_active,
                     money_spent,
                     publications_number,
-                    recovering_code
-                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`, user.toArray()
+                    role,
+                    recovery_code
+                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`, user.toArray()
             )
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'New User data created'))
@@ -53,8 +54,9 @@ export const usersRepository: IUsersRepository = {
                     is_active,
                     money_spent,
                     publications_number,
-                    recovering_code
-                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`, user.toArray()
+                    role,
+                    recovery_code
+                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`, user.toArray()
             )
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'User found by name'))
@@ -68,7 +70,7 @@ export const usersRepository: IUsersRepository = {
 
     delete: async function (id: UUID): Promise<number | Exception> {
         return await pool
-            .query(`DELETE FROM ${schemaName} WHERE id = ${id}`)
+            .query(`DELETE FROM ${schemaName} WHERE id = $1`, [id])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', id, '\t', 'User deleted'))
                 return res.rowCount
@@ -94,8 +96,11 @@ export const usersRepository: IUsersRepository = {
 
     findById: async function (id: UUID): Promise<User | Exception> {
         return await pool
-            .query(`SELECT * FROM ${schemaName} WHERE name = ${id}`)
+            .query(`SELECT * FROM ${schemaName} WHERE id = $1`, [id])
             .then((res: any) => {
+                if (res.rows.length === 0) {
+                    throw new Exception(404, 'Not found exception')
+                }
                 console.log(info(), postgresLog('Postgre', `User found by id ${id}`))
                 return res.rows[0] as User
             })
@@ -109,7 +114,7 @@ export const usersRepository: IUsersRepository = {
 
     findByUsername: async function (username: string): Promise<Exception | User[]> {
         return await pool
-            .query(`SELECT * FROM ${schemaName} WHERE username = ${username}`)
+            .query(`SELECT * FROM ${schemaName} WHERE username = $1`, [username])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'User found by username'))
                 return res.rows as User[]
@@ -122,7 +127,7 @@ export const usersRepository: IUsersRepository = {
 
     findByEmail: async function (email: string): Promise<Exception | User[]> {
         return await pool
-            .query(`SELECT * FROM ${schemaName} WHERE email = ${email}`)
+            .query(`SELECT * FROM ${schemaName} WHERE email = $1`, [email])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'User found by email'))
                 return res.rows as User[]

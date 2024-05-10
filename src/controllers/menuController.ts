@@ -14,6 +14,8 @@ const menusControllerRouter = Router()
  * @openapi
  * /menus:
  *  post:
+ *      security:
+ *      - BearerAuth: []
  *      description: Create new menu
  *      operationId: saveMenu
  *      tags:
@@ -95,6 +97,8 @@ menusControllerRouter.post('/menus', json(),
  * @openapi
  * /menus:
  *  put:
+ *      security:
+ *      - BearerAuth: []
  *      description: Update menu
  *      operationId: updateMenu
  *      tags:
@@ -182,6 +186,8 @@ menusControllerRouter.put('/menus', json(),
  * @openapi
  * /menus:
  *  delete:
+ *      security:
+ *      - BearerAuth: []
  *      description: Delete all menus
  *      operationId: deleteAllMenu
  *      tags:
@@ -226,6 +232,8 @@ menusControllerRouter.delete('/menus', json(), async (req, res) => {
  * @openapi
  * /menus/id/{id}:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get menu by id
  *      operationId: getMenuById
  *      tags:
@@ -277,6 +285,8 @@ menusControllerRouter.get('/menus/id/:id', json(), async (req, res) => {
  * @openapi
  * /menus:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get all menus
  *      operationId: getAllMenu
  *      tags:

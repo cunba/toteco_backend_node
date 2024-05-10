@@ -98,6 +98,7 @@ export class User {
             this.is_active,
             this.money_spent,
             this.publications_number,
+            this.role,
             this.recovery_code
         ]
     }

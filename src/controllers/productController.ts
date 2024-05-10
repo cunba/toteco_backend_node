@@ -18,6 +18,8 @@ const productsControllerRouter = Router()
  * @openapi
  * /products:
  *  post:
+ *      security:
+ *      - BearerAuth: []
  *      description: Create new product
  *      operationId: saveProduct
  *      tags:
@@ -132,6 +134,8 @@ productsControllerRouter.post('/products', json(),
  * @openapi
  * /products:
  *  put:
+ *      security:
+ *      - BearerAuth: []
  *      description: Update product
  *      operationId: updateProduct
  *      tags:
@@ -220,6 +224,8 @@ productsControllerRouter.put('/products', json(),
  * @openapi
  * /products:
  *  delete:
+ *      security:
+ *      - BearerAuth: []
  *      description: Delete all products
  *      operationId: deleteAllProduct
  *      tags:
@@ -315,6 +321,8 @@ productsControllerRouter.get('/products/id/:id', json(), async (req, res) => {
  * @openapi
  * /products:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get all products
  *      operationId: getAllProduct
  *      tags:
@@ -360,6 +368,8 @@ productsControllerRouter.get('/products', json(), async (req, res) => {
  * @openapi
  * /products/publication/{id}:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get products by publication ID
  *      operationId: getProductsByPublicationId
  *      tags:
@@ -412,6 +422,8 @@ productsControllerRouter.get('/products/publication/:id', json(), async (req, re
  * @openapi
  * /products/menu/{id}:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get products by menu ID
  *      operationId: getProductsByMenuId
  *      tags:

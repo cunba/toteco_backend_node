@@ -14,6 +14,8 @@ const establishmentsControllerRouter = Router()
  * @openapi
  * /establishments:
  *  post:
+ *      security:
+ *      - BearerAuth: []
  *      description: Create new establishment
  *      operationId: saveEstablishment
  *      tags:
@@ -97,6 +99,8 @@ establishmentsControllerRouter.post('/establishments', json(),
  * @openapi
  * /establishments:
  *  put:
+ *      security:
+ *      - BearerAuth: []
  *      description: Update establishment
  *      operationId: updateEstablishment
  *      tags:
@@ -186,6 +190,8 @@ establishmentsControllerRouter.put('/establishments', json(),
  * @openapi
  * /establishments:
  *  delete:
+ *      security:
+ *      - BearerAuth: []
  *      description: Delete all establishments
  *      operationId: deleteAllEstablishment
  *      tags:
@@ -230,6 +236,8 @@ establishmentsControllerRouter.delete('/establishments', json(), async (req, res
  * @openapi
  * /establishments/id/{id}:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get establishment by id
  *      operationId: getEstablishmentById
  *      tags:
@@ -281,6 +289,8 @@ establishmentsControllerRouter.get('/establishments/id/:id', json(), async (req,
  * @openapi
  * /establishments:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get all establishments
  *      operationId: getAllEstablishment
  *      tags:
@@ -326,6 +336,8 @@ establishmentsControllerRouter.get('/establishments', json(), async (req, res) =
  * @openapi
  * /establishments/name/{name}:
  *  get:
+ *      security:
+ *      - BearerAuth: []
  *      description: Get by name
  *      operationId: getEstablishmentByName
  *      tags:
