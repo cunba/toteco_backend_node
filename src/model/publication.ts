@@ -15,9 +15,9 @@ import { User } from "./user"
  *                  type: number
  *              updated:
  *                  type: number
- *              total_price:
+ *              totalPrice:
  *                  type: number
- *              total_score:
+ *              totalScore:
  *                  type: number
  *              photo:
  *                  type: string
@@ -30,8 +30,8 @@ export class Publication {
     id: UUID
     created: number
     updated: number | null
-    total_price: number
-    total_score: number
+    totalPrice: number
+    totalScore: number
     photo: any
     establishment: Establishment
     user: User
@@ -40,8 +40,8 @@ export class Publication {
         id: UUID,
         created: number,
         updated: number | null,
-        total_price: number,
-        total_score: number,
+        totalPrice: number,
+        totalScore: number,
         photo: any,
         establishment: Establishment,
         user: User
@@ -49,8 +49,8 @@ export class Publication {
         this.id = id
         this.created = created
         this.updated = updated
-        this.total_price = total_price
-        this.total_score = total_score
+        this.totalPrice = totalPrice
+        this.totalScore = totalScore
         this.photo = photo
         this.establishment = establishment
         this.user = user
@@ -61,8 +61,8 @@ export class Publication {
             this.id,
             this.created,
             this.updated,
-            this.total_price,
-            this.total_score,
+            this.totalPrice,
+            this.totalScore,
             this.photo,
             this.establishment.id,
             this.user.id

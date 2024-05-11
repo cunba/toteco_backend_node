@@ -11,21 +11,21 @@ import { UUID } from "crypto"
  *                  format: uuid
  *              username:
  *                  type: string
- *              recovery_code:
+ *              recoveryCode:
  *                  type: number
  */
 export class RecoverAccount {
     id: UUID
     username: string
-    recovery_code: number | null
+    recoveryCode: number | null
 
     constructor(
         id: UUID,
         username: string,
-        recovery_code: number | null
+        recoveryCode: number | null
     ) {
         this.id = id
         this.username = username
-        this.recovery_code = recovery_code
+        this.recoveryCode = recoveryCode
     }
 }

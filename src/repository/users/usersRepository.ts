@@ -21,12 +21,13 @@ export const usersRepository: IUsersRepository = {
                     password,
                     created,
                     updated,
+                    photo,
                     is_active,
                     money_spent,
                     publications_number,
                     role,
                     recovery_code
-                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`, user.toArray()
+                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`, user.toArray()
             )
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'New User data created'))

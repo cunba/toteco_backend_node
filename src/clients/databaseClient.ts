@@ -51,6 +51,7 @@ export const databaseClient = async () => {
                 password VARCHAR(100),
                 created BIGINT,
                 updated BIGINT NULL,
+                photo VARCHAR(200),
                 is_active BOOLEAN,
                 money_spent DECIMAL(8,2),
                 publications_number INTEGER,
@@ -69,7 +70,7 @@ export const databaseClient = async () => {
                 updated BIGINT NULL,
                 total_price DECIMAL(5,2),
                 total_score DECIMAL(3,1),
-                photo VARCHAR(50),
+                photo VARCHAR(200),
                 establishment_id UUID,
                 user_id UUID,
                 CONSTRAINT fk_establishment_id

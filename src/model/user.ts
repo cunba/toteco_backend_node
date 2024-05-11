@@ -15,7 +15,7 @@ import { UUID } from "crypto"
  *                  type: string
  *              surname:
  *                  type: string
- *              birth_date:
+ *              birthDate:
  *                  type: number
  *              email:
  *                  type: string
@@ -25,63 +25,68 @@ import { UUID } from "crypto"
  *                  type: number
  *              updated:
  *                  type: number
- *              is_active:
+ *              photo:
+ *                  type: string
+ *              isActive:
  *                  type: boolean
- *              money_spent:
+ *              moneySpent:
  *                  type: number
- *              publications_number:
+ *              publicationsNumber:
  *                  type: number
  *              role:
  *                  type: string
- *              recovery_code:
- *                  type: string
+ *              recoveryCode:
+ *                  type: number
  */
 export class User {
     id: UUID
     username: string
     name: string
     surname: string
-    birth_date: number
+    birthDate: number
     email: string
     password: string
     created: number
     updated: number | null
-    is_active: boolean
-    money_spent: number
-    publications_number: number
+    photo: any
+    isActive: boolean
+    moneySpent: number
+    publicationsNumber: number
     role: string
-    recovery_code: number | null
+    recoveryCode: number | null
 
     constructor(
         id: UUID,
         username: string,
         name: string,
         surname: string,
-        birth_date: number,
+        birthDate: number,
         email: string,
         password: string,
         created: number,
         updated: number | null,
-        is_active: boolean,
-        money_spent: number,
-        publications_number: number,
+        photo: any,
+        isActive: boolean,
+        moneySpent: number,
+        publicationsNumber: number,
         role: string,
-        recovery_code: number | null
+        recoveryCode: number | null
     ) {
         this.id = id
         this.username = username
         this.name = name
         this.surname = surname
-        this.birth_date = birth_date
+        this.birthDate = birthDate
         this.email = email
         this.password = password
         this.created = created
         this.updated = updated
-        this.is_active = is_active
-        this.money_spent = money_spent
-        this.publications_number = publications_number
+        this.photo = photo
+        this.isActive = isActive
+        this.moneySpent = moneySpent
+        this.publicationsNumber = publicationsNumber
         this.role = role
-        this.recovery_code = recovery_code
+        this.recoveryCode = recoveryCode
     }
 
     toArray() {
@@ -90,16 +95,17 @@ export class User {
             this.username,
             this.name,
             this.surname,
-            this.birth_date,
+            this.birthDate,
             this.email,
             this.password,
             this.created,
             this.updated,
-            this.is_active,
-            this.money_spent,
-            this.publications_number,
+            this.photo,
+            this.isActive,
+            this.moneySpent,
+            this.publicationsNumber,
             this.role,
-            this.recovery_code
+            this.recoveryCode
         ]
     }
 }

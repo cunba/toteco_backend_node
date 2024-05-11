@@ -143,7 +143,6 @@ menusControllerRouter.post('/menus', json(),
  */
 menusControllerRouter.put('/menus', json(),
     body('id').trim().notEmpty(),
-    body('date').trim().notEmpty().isNumeric(),
     body('price').trim().notEmpty().isNumeric(),
     body('score').trim().notEmpty().isNumeric(),
     async (req, res) => {

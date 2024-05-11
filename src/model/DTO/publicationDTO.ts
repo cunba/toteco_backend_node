@@ -6,37 +6,37 @@ import { UUID } from "crypto"
  *  schemas:
  *      PublicationDTO:
  *          properties:
- *              total_price:
+ *              totalPrice:
  *                  type: number
- *              total_score:
+ *              totalScore:
  *                  type: number
  *              photo:
  *                  type: string
- *              establishment_id:
+ *              establishmentId:
  *                  type: string
  *                  format: uuid
- *              user_id:
+ *              userId:
  *                  type: string
  *                  format: uuid
  */
 export class PublicationDTO {
-    total_price: number
-    total_score: number
+    totalPrice: number
+    totalScore: number
     photo: any
-    establishment_id: UUID
-    user_id: UUID
+    establishmentId: UUID
+    userId: UUID
 
     constructor(
-        total_price: number,
-        total_score: number,
+        totalPrice: number,
+        totalScore: number,
         photo: any,
-        establishment_id: UUID,
-        user_id: UUID
+        establishmentId: UUID,
+        userId: UUID
     ) {
-        this.total_price = total_price
-        this.total_score = total_score
+        this.totalPrice = totalPrice
+        this.totalScore = totalScore
         this.photo = photo
-        this.establishment_id = establishment_id
-        this.user_id = user_id
+        this.establishmentId = establishmentId
+        this.userId = userId
     }
 }

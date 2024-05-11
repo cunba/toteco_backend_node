@@ -18,7 +18,7 @@ import { Publication } from "./publication"
  *                  type: number
  *              location:
  *                  type: string
- *              is_open:
+ *              isOpen:
  *                  type: boolean
  *              score:
  *                  type: number
@@ -33,7 +33,7 @@ export class Establishment {
     created: number
     updated: number | null
     location: string
-    is_open: boolean
+    isOpen: boolean
     score: number
     publications?: Publication[]
 
@@ -43,7 +43,7 @@ export class Establishment {
         created: number,
         updated: number | null,
         location: string,
-        is_open: boolean,
+        isOpen: boolean,
         score: number,
         publications?: Publication[]
     ) {
@@ -52,7 +52,7 @@ export class Establishment {
         this.created = created
         this.updated = updated
         this.location = location
-        this.is_open = is_open
+        this.isOpen = isOpen
         this.score = score
         this.publications = publications
     }
@@ -64,7 +64,7 @@ export class Establishment {
             this.created,
             this.updated,
             this.location,
-            this.is_open,
+            this.isOpen,
             this.score
         ]
     }

@@ -57,7 +57,7 @@ usersControllerRouter.post('/users', json(),
     body('username').trim().notEmpty(),
     body('name').trim().notEmpty(),
     body('surname').trim().notEmpty(),
-    body('birth_date').trim().notEmpty().isNumeric(),
+    body('birthDate').trim().notEmpty().isNumeric(),
     body('email').trim().notEmpty(),
     body('password').trim().notEmpty(),
     body('role').trim().notEmpty(),
@@ -88,11 +88,12 @@ usersControllerRouter.post('/users', json(),
             userDTO.username,
             userDTO.name,
             userDTO.surname,
-            userDTO.birth_date,
+            userDTO.birthDate,
             userDTO.email,
             userDTO.password,
             new Date().getTime(),
             null,
+            userDTO.photo,
             true,
             0,
             0,
@@ -161,7 +162,7 @@ usersControllerRouter.put('/users', json(),
     body('username').trim().notEmpty(),
     body('name').trim().notEmpty(),
     body('surname').trim().notEmpty(),
-    body('birth_date').trim().notEmpty().isNumeric(),
+    body('birthDate').trim().notEmpty().isNumeric(),
     body('email').trim().notEmpty(),
     body('password').trim().notEmpty(),
     body('role').trim().notEmpty(),
@@ -544,7 +545,7 @@ usersControllerRouter.get('/users/recover-account/:email', json(), async (req, r
         const user = await usersRepository.findByEmail(req.params.email)
         let recoverAccount = null
         if (user instanceof User)
-            recoverAccount = new RecoverAccount(user.id, user.username, user.recovery_code)
+            recoverAccount = new RecoverAccount(user.id, user.username, user.recoveryCode)
         return res.status(200).send(recoverAccount)
     } catch (err: any) {
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))

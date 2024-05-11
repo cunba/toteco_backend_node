@@ -10,11 +10,13 @@
  *                  type: string
  *              surname:
  *                  type: string
- *              birth_date:
+ *              birthDate:
  *                  type: number
  *              email:
  *                  type: string
  *              password:
+ *                  type: string
+ *              photo:
  *                  type: string
  *              role:
  *                  type: string
@@ -23,26 +25,29 @@ export class UserDTO {
     username: string
     name: string
     surname: string
-    birth_date: number
+    birthDate: number
     email: string
     password: string
+    photo: string
     role: string
 
     constructor(
         username: string,
         name: string,
         surname: string,
-        birth_date: number,
+        birthDate: number,
         email: string,
         password: string,
+        photo: string,
         role: string
     ) {
         this.username = username
         this.name = name
         this.surname = surname
-        this.birth_date = birth_date
+        this.birthDate = birthDate
         this.email = email
         this.password = password
+        this.photo = photo
         this.role = role
     }
 }

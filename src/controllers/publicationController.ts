@@ -56,11 +56,11 @@ const publicationsControllerRouter = Router()
  *                          $ref: '#/components/schemas/Exception'
  */
 publicationsControllerRouter.post('/publications', json(),
-    body('total_price').trim().notEmpty(),
-    body('total_score').trim().notEmpty(),
+    body('totalPrice').trim().notEmpty(),
+    body('totalScore').trim().notEmpty(),
     body('photo').trim().notEmpty(),
-    body('establishment_id').trim().notEmpty(),
-    body('user_id').trim().notEmpty(),
+    body('establishmentId').trim().notEmpty(),
+    body('userId').trim().notEmpty(),
     async (req, res) => {
         console.log(info(), apiLog('Api', '\t', 'New publication request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
@@ -84,9 +84,9 @@ publicationsControllerRouter.post('/publications', json(),
         const publicationDTO = req.body as PublicationDTO
 
         let establishment: any
-        if (publicationDTO.establishment_id) {
+        if (publicationDTO.establishmentId) {
             try {
-                establishment = await establishmentsRepository.findById(publicationDTO.establishment_id)
+                establishment = await establishmentsRepository.findById(publicationDTO.establishmentId)
             } catch (err: any) {
                 return res.status(404).send(err.message ?? 'Publication not found exception')
             }
@@ -97,9 +97,9 @@ publicationsControllerRouter.post('/publications', json(),
         }
 
         let user: any
-        if (publicationDTO.user_id) {
+        if (publicationDTO.userId) {
             try {
-                user = await usersRepository.findById(publicationDTO.user_id!)
+                user = await usersRepository.findById(publicationDTO.userId!)
             } catch (err: any) {
                 return res.status(404).send(err.message ?? 'Menu not found exception')
             }
@@ -113,8 +113,8 @@ publicationsControllerRouter.post('/publications', json(),
             randomUUID(),
             new Date().getTime(),
             null,
-            publicationDTO.total_price,
-            publicationDTO.total_score,
+            publicationDTO.totalPrice,
+            publicationDTO.totalScore,
             publicationDTO.photo,
             establishment,
             user
@@ -178,11 +178,11 @@ publicationsControllerRouter.post('/publications', json(),
  *                          $ref: '#/components/schemas/Exception'
  */
 publicationsControllerRouter.put('/publications', json(),
-    body('total_price').trim().notEmpty(),
-    body('total_score').trim().notEmpty(),
+    body('totalPrice').trim().notEmpty(),
+    body('totalScore').trim().notEmpty(),
     body('photo').trim().notEmpty(),
-    body('establishment_id').trim().notEmpty(),
-    body('user_id').trim().notEmpty(),
+    body('establishmentId').trim().notEmpty(),
+    body('userId').trim().notEmpty(),
     async (req, res) => {
         console.log(info(), apiLog('Api', '\t', 'Update publication request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))

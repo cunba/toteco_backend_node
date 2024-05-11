@@ -8,7 +8,7 @@ import { UUID } from "crypto"
  *          properties:
  *              name:
  *                  type: string
- *              in_menu:
+ *              inMenu:
  *                  type: boolean
  *              price:
  *                  type: number
@@ -23,7 +23,7 @@ import { UUID } from "crypto"
  */
 export class ProductDTO {
     name: string
-    in_menu: boolean
+    inMenu: boolean
     price?: number
     score?: number
     menu_id?: UUID
@@ -31,14 +31,14 @@ export class ProductDTO {
 
     constructor(
         name: string,
-        in_menu: boolean,
+        inMenu: boolean,
         price?: number,
         score?: number,
         menu_id?: UUID,
         publication_id?: UUID
     ) {
         this.name = name
-        this.in_menu = in_menu
+        this.inMenu = inMenu
         this.price = price
         this.score = score
         this.menu_id = menu_id
