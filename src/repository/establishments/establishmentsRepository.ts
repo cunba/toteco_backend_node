@@ -17,8 +17,10 @@ export const establishmentsRepository: IEstablishmentsRepository = {
                     created,
                     location,
                     is_open,
+                    is_computer_allowed,
+                    comments,
                     score
-                ) VALUES($1, $2, $3, $4, $5, $6)`, establishment.toArray()
+                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8)`, establishment.toArray()
             )
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'New Establishment data created'))

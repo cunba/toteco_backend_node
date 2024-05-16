@@ -14,10 +14,10 @@ import { UUID } from "crypto"
  *                  type: number
  *              score:
  *                  type: number
- *              menu_id:
+ *              menuId:
  *                  type: string
  *                  format: uuid
- *              publication_id:
+ *              publicationId:
  *                  type: string
  *                  format: uuid
  */
@@ -26,22 +26,22 @@ export class ProductDTO {
     inMenu: boolean
     price?: number
     score?: number
-    menu_id?: UUID
-    publication_id?: UUID
+    menuId?: UUID
+    publicationId?: UUID
 
     constructor(
         name: string,
         inMenu: boolean,
         price?: number,
         score?: number,
-        menu_id?: UUID,
-        publication_id?: UUID
+        menuId?: UUID,
+        publicationId?: UUID
     ) {
         this.name = name
         this.inMenu = inMenu
         this.price = price
         this.score = score
-        this.menu_id = menu_id
-        this.publication_id = publication_id
+        this.menuId = menuId
+        this.publicationId = publicationId
     }
 }

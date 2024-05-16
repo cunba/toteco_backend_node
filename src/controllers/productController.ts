@@ -84,9 +84,9 @@ productsControllerRouter.post('/products', json(),
         const productDTO = req.body as ProductDTO
 
         let publication: any
-        if (productDTO.publication_id) {
+        if (productDTO.publicationId) {
             try {
-                publication = await publicationsRepository.findById(productDTO.publication_id)
+                publication = await publicationsRepository.findById(productDTO.publicationId)
             } catch (err: any) {
                 return res.status(404).send(err.message ?? 'Publication not found exception')
             }
@@ -97,9 +97,9 @@ productsControllerRouter.post('/products', json(),
         }
 
         let menu: any
-        if (productDTO.menu_id) {
+        if (productDTO.menuId) {
             try {
-                menu = await menusRepository.findById(productDTO.menu_id!)
+                menu = await menusRepository.findById(productDTO.menuId!)
             } catch (err: any) {
                 return res.status(404).send(err.message ?? 'Menu not found exception')
             }

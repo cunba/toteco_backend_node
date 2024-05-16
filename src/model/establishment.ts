@@ -20,6 +20,10 @@ import { Publication } from "./publication"
  *                  type: string
  *              isOpen:
  *                  type: boolean
+ *              isComputerAllowed:
+ *                  type: boolean
+ *              comments:
+ *                  type: string
  *              score:
  *                  type: number
  *              publications:
@@ -34,6 +38,8 @@ export class Establishment {
     updated: number | null
     location: string
     isOpen: boolean
+    isComputerAllowed: boolean
+    comments?: string
     score: number
     publications?: Publication[]
 
@@ -44,7 +50,9 @@ export class Establishment {
         updated: number | null,
         location: string,
         isOpen: boolean,
+        isComputerAllowed: boolean,
         score: number,
+        comments?: string,
         publications?: Publication[]
     ) {
         this.id = id
@@ -53,7 +61,9 @@ export class Establishment {
         this.updated = updated
         this.location = location
         this.isOpen = isOpen
+        this.isComputerAllowed = isComputerAllowed
         this.score = score
+        this.comments = comments
         this.publications = publications
     }
 
@@ -65,6 +75,8 @@ export class Establishment {
             this.updated,
             this.location,
             this.isOpen,
+            this.isComputerAllowed,
+            this.comments,
             this.score
         ]
     }

@@ -83,7 +83,9 @@ establishmentsControllerRouter.post('/establishments', json(),
             null,
             establishmentDTO.location,
             true,
-            0
+            establishmentDTO.isComputerAllowed,
+            0,
+            establishmentDTO.comments
         )
 
         try {
