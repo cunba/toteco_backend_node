@@ -441,7 +441,7 @@ usersControllerRouter.get('/users/email/:email', json(), async (req, res) => {
 usersControllerRouter.get('/users/logged', json(), async (req, res) => {
     try {
         let token = req.headers.authorization
-        const tokenPayload = decode(token!) as TokenPayload
+        const tokenPayload = JSON.parse((decode(token!.replace('Bearer ', '')) as any).data) as TokenPayload
         const response = await usersRepository.findById(tokenPayload.id)
         return res.status(200).send(response)
     } catch (err: any) {
