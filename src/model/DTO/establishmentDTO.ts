@@ -10,24 +10,24 @@
  *                  type: string
  *              isComputerAllowed:
  *                  type: boolean
- *              comments:
+ *              mapsId:
  *                  type: string
  */
 export class EstablishmentDTO {
     name: string
     location: string
     isComputerAllowed: boolean
-    comments?: string
+    mapsId: string
 
     constructor(
         name: string,
         location: string,
         isComputerAllowed: boolean,
-        comments?: string
+        mapsId: string
     ) {
         this.name = name
         this.location = location
         this.isComputerAllowed = isComputerAllowed
-        this.comments = comments
+        this.mapsId = mapsId
     }
 }

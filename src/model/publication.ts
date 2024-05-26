@@ -21,6 +21,8 @@ import { User } from "./user"
  *                  type: number
  *              photo:
  *                  type: string
+ *              comment:
+ *                  type: string
  *              establishment:
  *                  $ref: '#/components/schemas/Establishment'
  *              user:
@@ -33,6 +35,7 @@ export class Publication {
     totalPrice: number
     totalScore: number
     photo: any
+    comment: string
     establishment: Establishment
     user: User
 
@@ -43,6 +46,7 @@ export class Publication {
         totalPrice: number,
         totalScore: number,
         photo: any,
+        comment: string,
         establishment: Establishment,
         user: User
     ) {
@@ -52,6 +56,7 @@ export class Publication {
         this.totalPrice = totalPrice
         this.totalScore = totalScore
         this.photo = photo
+        this.comment = comment
         this.establishment = establishment
         this.user = user
     }
@@ -64,6 +69,7 @@ export class Publication {
             this.totalPrice,
             this.totalScore,
             this.photo,
+            this.comment,
             this.establishment.id,
             this.user.id
         ]

@@ -84,8 +84,8 @@ establishmentsControllerRouter.post('/establishments', json(),
             establishmentDTO.location,
             true,
             establishmentDTO.isComputerAllowed,
-            0,
-            establishmentDTO.comments
+            establishmentDTO.mapsId,
+            0
         )
 
         try {

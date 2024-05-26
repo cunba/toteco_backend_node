@@ -18,7 +18,7 @@ export const establishmentsRepository: IEstablishmentsRepository = {
                     location,
                     is_open,
                     is_computer_allowed,
-                    comments,
+                    maps_id
                     score
                 ) VALUES($1, $2, $3, $4, $5, $6, $7, $8)`, establishment.toArray()
             )
@@ -54,8 +54,10 @@ export const establishmentsRepository: IEstablishmentsRepository = {
                     created,
                     location,
                     is_open,
+                    is_computer_allowed,
+                    maps_id
                     score
-                ) VALUES($1, $2, $3, $4, $5, $6)`, establishment.toArray()
+                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8)`, establishment.toArray()
             )
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Establishment found by name'))

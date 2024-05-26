@@ -21,7 +21,7 @@ export const databaseClient = async () => {
                 location VARCHAR(50),
                 is_open BOOLEAN,
                 is_computer_allowed BOOLEAN,
-                comments VARCHAR(2000) NULL,
+                maps_id VARCHAR(100),
                 score DECIMAL(3,1)
             );`
         )
@@ -72,7 +72,8 @@ export const databaseClient = async () => {
                 updated BIGINT NULL,
                 total_price DECIMAL(5,2),
                 total_score DECIMAL(3,1),
-                photo VARCHAR(1000),
+                photo VARCHAR(500),
+                comment VARCHAR(500),
                 establishment_id UUID,
                 user_id UUID,
                 CONSTRAINT fk_establishment_id

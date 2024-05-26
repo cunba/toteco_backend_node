@@ -18,9 +18,10 @@ export const publicationsRepository: IPublicationsRepository = {
                     total_price,
                     total_score,
                     photo,
+                    comment,
                     establishment_id,
                     user_id
-                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8)`, publication.toArray()
+                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`, publication.toArray()
             )
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'New Publication data created'))
@@ -42,9 +43,10 @@ export const publicationsRepository: IPublicationsRepository = {
                     total_price,
                     total_score,
                     photo,
+                    comment,
                     establishment_id,
                     user_id
-                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8)`, publication.toArray()
+                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`, publication.toArray()
             )
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Publication found by name'))

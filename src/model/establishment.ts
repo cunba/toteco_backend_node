@@ -22,7 +22,7 @@ import { Publication } from "./publication"
  *                  type: boolean
  *              isComputerAllowed:
  *                  type: boolean
- *              comments:
+ *              mapsId:
  *                  type: string
  *              score:
  *                  type: number
@@ -39,7 +39,7 @@ export class Establishment {
     location: string
     isOpen: boolean
     isComputerAllowed: boolean
-    comments?: string
+    mapsId: string
     score: number
     publications?: Publication[]
 
@@ -51,8 +51,8 @@ export class Establishment {
         location: string,
         isOpen: boolean,
         isComputerAllowed: boolean,
+        mapsId: string,
         score: number,
-        comments?: string,
         publications?: Publication[]
     ) {
         this.id = id
@@ -62,8 +62,8 @@ export class Establishment {
         this.location = location
         this.isOpen = isOpen
         this.isComputerAllowed = isComputerAllowed
+        this.mapsId = mapsId
         this.score = score
-        this.comments = comments
         this.publications = publications
     }
 
@@ -76,7 +76,7 @@ export class Establishment {
             this.location,
             this.isOpen,
             this.isComputerAllowed,
-            this.comments,
+            this.mapsId,
             this.score
         ]
     }

@@ -116,6 +116,7 @@ publicationsControllerRouter.post('/publications', json(),
             publicationDTO.totalPrice,
             publicationDTO.totalScore,
             publicationDTO.photo,
+            publicationDTO.comment,
             establishment,
             user
         )
