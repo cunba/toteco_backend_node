@@ -5,4 +5,6 @@ import { IRepositery } from "../iRepository"
 export interface IEstablishmentsRepository extends IRepositery<Establishment> {
 
     findByName: (name: string) => Promise<Establishment[] | Exception>
+
+    findByMapsId: (mapsId: string) => Promise<Establishment[] | Exception>
 }

@@ -385,4 +385,55 @@ establishmentsControllerRouter.get('/establishments/name/:name', json(), async (
     }
 })
 
+/**
+ * @openapi
+ * /establishments/mapsId/{mapsId}:
+ *  get:
+ *      security:
+ *      - BearerAuth: []
+ *      description: Get by name
+ *      operationId: getEstablishmentByMapsId
+ *      tags:
+ *      - Establishments
+ *      parameters:
+ *          - in: path
+ *            name: mapsId
+ *            required: true
+ *            schema:
+ *                type: string
+ *      responses:
+ *          200:
+ *              description: SUCCESS
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Establishment'
+ *          400:
+ *              description: BAD REQUEST
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Exception'
+ *          401:
+ *              description: UNAUTHORIZED
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Exception'
+ *          500:
+ *              description: INTERNAL SERVER ERROR
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Exception'
+ */
+establishmentsControllerRouter.get('/establishments/mapsId/:mapsId', json(), async (req, res) => {
+    try {
+        const response = await establishmentsRepository.findByMapsId(req.params.mapsId)
+        return res.status(200).send(response)
+    } catch (err: any) {
+        return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
+    }
+})
+
 export default establishmentsControllerRouter

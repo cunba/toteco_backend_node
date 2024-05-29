@@ -45,6 +45,19 @@ export const establishmentsRepository: IEstablishmentsRepository = {
             })
     },
 
+    findByMapsId: async function (mapsId: string): Promise<Exception | Establishment[]> {
+        return await pool
+            .query(`SELECT * FROM ${schemaName} WHERE maps_id = $1`, [mapsId])
+            .then((res: any) => {
+                console.log(info(), postgresLog('Postgre', 'Establishment found by maps ID'))
+                return res.rows as Establishment[]
+            })
+            .catch((err: any) => {
+                console.log(error(), postgresLog('Postgre', `Error finding establishment by maps ID`, err.stack))
+                throw new Exception(400, "Function not implemented.")
+            })
+    },
+
     update: async function (establishment: Establishment): Promise<number | Exception> {
         return await pool
             .query(
