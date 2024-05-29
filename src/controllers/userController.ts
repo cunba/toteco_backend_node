@@ -11,6 +11,7 @@ import { RecoverAccount } from "../model/utils/recoverAccount"
 import { TokenPayload } from "../model/utils/tokenPayload"
 import { UpdatePassword } from "../model/utils/updatePassword"
 import { usersRepository } from "../repository/users/usersRepository"
+import { genSaltSync, hashSync } from "bcrypt"
 
 const usersControllerRouter = Router()
 
@@ -82,15 +83,16 @@ usersControllerRouter.post('/users', json(),
         }
 
         const userDTO = req.body as UserDTO
+        const passwordEncrypted = hashSync(userDTO.password, 10)
 
         const user = new User(
             randomUUID(),
-            userDTO.username,
+            userDTO.username.toLowerCase(),
             userDTO.name,
             userDTO.surname,
             userDTO.birthDate,
-            userDTO.email,
-            userDTO.password,
+            userDTO.email.toLowerCase(),
+            passwordEncrypted,
             new Date().getTime(),
             null,
             userDTO.photo,
@@ -344,7 +346,7 @@ usersControllerRouter.get('/users/id/:id', json(), async (req, res) => {
  */
 usersControllerRouter.get('/users/username/:username', json(), async (req, res) => {
     try {
-        const response = await usersRepository.findByEmail(req.params.username)
+        const response = await usersRepository.findByUsername(req.params.username.toLowerCase())
         return res.status(200).send(response)
     } catch (err: any) {
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -395,7 +397,7 @@ usersControllerRouter.get('/users/username/:username', json(), async (req, res) 
  */
 usersControllerRouter.get('/users/email/:email', json(), async (req, res) => {
     try {
-        const response = await usersRepository.findByEmail(req.params.email)
+        const response = await usersRepository.findByEmail(req.params.email.toLowerCase())
         return res.status(200).send(response)
     } catch (err: any) {
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -542,10 +544,10 @@ usersControllerRouter.get('/users', json(), async (req, res) => {
 */
 usersControllerRouter.get('/users/recover-account/:email', json(), async (req, res) => {
     try {
-        const user = await usersRepository.findByEmail(req.params.email)
+        const user = await usersRepository.findByEmail(req.params.email.toLowerCase())
         let recoverAccount = null
         if (user instanceof User)
-            recoverAccount = new RecoverAccount(user.id, user.username, user.recoveryCode)
+            recoverAccount = new RecoverAccount(user.id, user.username.toLowerCase(), user.recoveryCode)
         return res.status(200).send(recoverAccount)
     } catch (err: any) {
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -830,6 +832,7 @@ usersControllerRouter.get('/users/update-password', json(),
         }
 
         const updatePassword = req.body as UpdatePassword
+        const passwordEncrypted = hashSync(updatePassword.password, 10)
 
         try {
             await usersRepository.findById(updatePassword.id)
@@ -838,7 +841,7 @@ usersControllerRouter.get('/users/update-password', json(),
         }
 
         try {
-            const response = await usersRepository.updatePassword(updatePassword.id, updatePassword.password)
+            const response = await usersRepository.updatePassword(updatePassword.id, passwordEncrypted)
             return res.status(200).send(response)
         } catch (err: any) {
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))

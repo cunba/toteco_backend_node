@@ -1,3 +1,4 @@
+import { compareSync } from "bcrypt"
 import { json } from "body-parser"
 import { Router } from "express"
 import { body, ValidationError, validationResult } from "express-validator"
@@ -72,27 +73,25 @@ loginControllerRouter.post('/login', json(),
         try {
             let user = await usersRepository.findByUsername(loginRequest.username)
             if (!(user instanceof Exception) && user.length > 0) {
-                console.log(user[0].password)
-                console.log(loginRequest.password)
-                if (user[0].password === loginRequest.password) {
+                if (compareSync(loginRequest.password, user[0].password)) {
                     const tokenPayload = new TokenPayload(user[0].id, user[0].username, user[0].email, user[0].role)
-                    const token = sign({data: JSON.stringify(tokenPayload)}, 'toteco', {expiresIn: '24h'})
+                    const token = sign({ data: JSON.stringify(tokenPayload) }, 'toteco', { expiresIn: '24h' })
                     const loginResponse = new LoginResponse(token)
                     return res.status(200).send(loginResponse)
                 } else {
+                    console.log(error(), apiLog('Invalid password'))
                     return res.status(401).send(new Exception(400, 'Invalid password'))
                 }
             } else {
-                user = await usersRepository.findByEmail(loginRequest.username)
+                user = await usersRepository.findByEmail(loginRequest.username.toLowerCase())
                 if (!(user instanceof Exception)) {
-                    console.log(user[0].password)
-                    console.log(loginRequest.password)
-                    if (user[0].password === loginRequest.password) {
+                    if (compareSync(loginRequest.password, user[0].password)) {
                         const tokenPayload = new TokenPayload(user[0].id, user[0].username, user[0].email, user[0].role)
-                        const token = sign({data: JSON.stringify(tokenPayload)}, 'toteco', {expiresIn: '24h'})
+                        const token = sign({ data: JSON.stringify(tokenPayload) }, 'toteco', { expiresIn: '24h' })
                         const loginResponse = new LoginResponse(token)
                         return res.status(200).send(loginResponse)
                     } else {
+                        console.log(error(), apiLog('Invalid password'))
                         return res.status(401).send(new Exception(400, 'Invalid password'))
                     }
                 }
