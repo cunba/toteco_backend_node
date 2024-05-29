@@ -80,7 +80,7 @@ loginControllerRouter.post('/login', json(),
                     return res.status(200).send(loginResponse)
                 } else {
                     console.log(error(), apiLog('Invalid password'))
-                    return res.status(401).send(new Exception(400, 'Invalid password'))
+                    return res.status(400).send(new Exception(400, 'Invalid password'))
                 }
             } else {
                 user = await usersRepository.findByEmail(loginRequest.username.toLowerCase())
@@ -92,7 +92,7 @@ loginControllerRouter.post('/login', json(),
                         return res.status(200).send(loginResponse)
                     } else {
                         console.log(error(), apiLog('Invalid password'))
-                        return res.status(401).send(new Exception(400, 'Invalid password'))
+                        return res.status(400).send(new Exception(400, 'Invalid password'))
                     }
                 }
             }
