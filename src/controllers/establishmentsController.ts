@@ -92,6 +92,7 @@ establishmentsControllerRouter.post('/establishments', json(),
             await establishmentsRepository.save(establishment)
             return res.status(201).send(establishment)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
         }
 
@@ -177,6 +178,7 @@ establishmentsControllerRouter.put('/establishments', json(),
         try {
             await establishmentsRepository.findById(establishment.id)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(404).send(err.message ?? 'Not found exception')
         }
 
@@ -184,6 +186,7 @@ establishmentsControllerRouter.put('/establishments', json(),
             const response = await establishmentsRepository.update(establishment)
             return res.status(200).send(response)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
         }
     })
@@ -230,6 +233,7 @@ establishmentsControllerRouter.delete('/establishments', json(), async (req, res
         const response = await establishmentsRepository.deleteAll()
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -282,7 +286,7 @@ establishmentsControllerRouter.get('/establishments/id/:id', json(), async (req,
         const response = await establishmentsRepository.findById(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
-        console.log(err)
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -330,6 +334,7 @@ establishmentsControllerRouter.get('/establishments', json(), async (req, res) =
         const response = await establishmentsRepository.findAll()
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -381,6 +386,7 @@ establishmentsControllerRouter.get('/establishments/name/:name', json(), async (
         const response = await establishmentsRepository.findByName(req.params.name)
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -432,6 +438,7 @@ establishmentsControllerRouter.get('/establishments/mapsId/:mapsId', json(), asy
         const response = await establishmentsRepository.findByMapsId(req.params.mapsId)
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })

@@ -4,9 +4,7 @@ import { Router } from "express"
 import { body, ValidationError, validationResult } from "express-validator"
 import { apiLog, error, info } from "../constants/constants"
 import { PublicationDTO } from "../model/DTO/publicationDTO"
-import { Establishment } from "../model/establishment"
 import { Exception } from "../model/exception"
-import { Menu } from "../model/menu"
 import { Publication } from "../model/publication"
 import { establishmentsRepository } from "../repository/establishments/establishmentsRepository"
 import { publicationsRepository } from "../repository/publications/publicationsRepository"
@@ -88,11 +86,8 @@ publicationsControllerRouter.post('/publications', json(),
             try {
                 establishment = await establishmentsRepository.findById(publicationDTO.establishmentId)
             } catch (err: any) {
+                console.log(error(), apiLog(err))
                 return res.status(404).send(err.message ?? 'Publication not found exception')
-            }
-
-            if (!(establishment instanceof Establishment)) {
-                return res.status(404).send('Publication not found exception')
             }
         }
 
@@ -101,11 +96,8 @@ publicationsControllerRouter.post('/publications', json(),
             try {
                 user = await usersRepository.findById(publicationDTO.userId!)
             } catch (err: any) {
+                console.log(error(), apiLog(err))
                 return res.status(404).send(err.message ?? 'Menu not found exception')
-            }
-
-            if (!(user instanceof Menu)) {
-                return res.status(404).send('Menu not found exception')
             }
         }
 
@@ -122,11 +114,13 @@ publicationsControllerRouter.post('/publications', json(),
         )
 
         try {
-            await publicationsRepository.save(publication)
+            const response = await publicationsRepository.save(publication)
+            console.log(response)
             const establishmentScore = await publicationsRepository.findTotalScoreByEstablishment(establishment.id)
             await establishmentsRepository.updateScore(establishment.id, establishmentScore as number)
             return res.status(201).send(publication)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
         }
 
@@ -211,6 +205,7 @@ publicationsControllerRouter.put('/publications', json(),
         try {
             await publicationsRepository.findById(publication.id)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(404).send(err.message ?? 'Not found exception')
         }
 
@@ -218,6 +213,7 @@ publicationsControllerRouter.put('/publications', json(),
             const response = await publicationsRepository.update(publication)
             return res.status(200).send(response)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
         }
     })
@@ -264,6 +260,7 @@ publicationsControllerRouter.delete('/publications', json(), async (req, res) =>
         const response = await publicationsRepository.deleteAll()
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -314,7 +311,7 @@ publicationsControllerRouter.get('/publications/id/:id', json(), async (req, res
         const response = await publicationsRepository.findById(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
-        console.log(err)
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -362,6 +359,7 @@ publicationsControllerRouter.get('/publications', json(), async (req, res) => {
         const response = await publicationsRepository.findAll()
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -416,6 +414,7 @@ publicationsControllerRouter.get('/publications/establishment/:id', json(), asyn
         const response = await publicationsRepository.findByEstablishment(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -470,6 +469,7 @@ publicationsControllerRouter.get('/publications/user/:id', json(), async (req, r
         const response = await publicationsRepository.findByUser(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })

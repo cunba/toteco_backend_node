@@ -5,9 +5,7 @@ import { body, ValidationError, validationResult } from "express-validator"
 import { apiLog, error, info } from "../constants/constants"
 import { ProductDTO } from "../model/DTO/productDTO"
 import { Exception } from "../model/exception"
-import { Menu } from "../model/menu"
 import { Product } from "../model/product"
-import { Publication } from "../model/publication"
 import { menusRepository } from "../repository/menus/menusRepository"
 import { productsRepository } from "../repository/products/productsRepository"
 import { publicationsRepository } from "../repository/publications/publicationsRepository"
@@ -88,11 +86,8 @@ productsControllerRouter.post('/products', json(),
             try {
                 publication = await publicationsRepository.findById(productDTO.publicationId)
             } catch (err: any) {
+                console.log(error(), apiLog(err))
                 return res.status(404).send(err.message ?? 'Publication not found exception')
-            }
-
-            if (!(publication instanceof Publication)) {
-                return res.status(404).send('Publication not found exception')
             }
         }
 
@@ -101,11 +96,8 @@ productsControllerRouter.post('/products', json(),
             try {
                 menu = await menusRepository.findById(productDTO.menuId!)
             } catch (err: any) {
+                console.log(error(), apiLog(err))
                 return res.status(404).send(err.message ?? 'Menu not found exception')
-            }
-
-            if (!(menu instanceof Menu)) {
-                return res.status(404).send('Menu not found exception')
             }
         }
 
@@ -125,6 +117,7 @@ productsControllerRouter.post('/products', json(),
             await productsRepository.save(product)
             return res.status(201).send(product)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
         }
 
@@ -209,6 +202,7 @@ productsControllerRouter.put('/products', json(),
         try {
             await productsRepository.findById(product.id)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(404).send(err.message ?? 'Not found exception')
         }
 
@@ -216,6 +210,7 @@ productsControllerRouter.put('/products', json(),
             const response = await productsRepository.update(product)
             return res.status(200).send(response)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
         }
     })
@@ -262,6 +257,7 @@ productsControllerRouter.delete('/products', json(), async (req, res) => {
         const response = await productsRepository.deleteAll()
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -312,7 +308,7 @@ productsControllerRouter.get('/products/id/:id', json(), async (req, res) => {
         const response = await productsRepository.findById(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
-        console.log(err)
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -360,6 +356,7 @@ productsControllerRouter.get('/products', json(), async (req, res) => {
         const response = await productsRepository.findAll()
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -414,6 +411,7 @@ productsControllerRouter.get('/products/publication/:id', json(), async (req, re
         const response = await productsRepository.findByPublication(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -468,6 +466,7 @@ productsControllerRouter.get('/products/menu/:id', json(), async (req, res) => {
         const response = await productsRepository.findByMenu(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })

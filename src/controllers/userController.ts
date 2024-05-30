@@ -1,3 +1,4 @@
+import { hashSync } from "bcrypt"
 import { json } from "body-parser"
 import { randomUUID, UUID } from "crypto"
 import { Router } from "express"
@@ -11,7 +12,6 @@ import { RecoverAccount } from "../model/utils/recoverAccount"
 import { TokenPayload } from "../model/utils/tokenPayload"
 import { UpdatePassword } from "../model/utils/updatePassword"
 import { usersRepository } from "../repository/users/usersRepository"
-import { genSaltSync, hashSync } from "bcrypt"
 
 const usersControllerRouter = Router()
 
@@ -107,6 +107,7 @@ usersControllerRouter.post('/users', json(),
             await usersRepository.save(user)
             return res.status(201).send(user)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
         }
 
@@ -193,6 +194,7 @@ usersControllerRouter.put('/users', json(),
         try {
             await usersRepository.findById(user.id)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(404).send(err ?? new Exception(404, err.message ?? 'Not found exception'))
         }
 
@@ -200,6 +202,7 @@ usersControllerRouter.put('/users', json(),
             const response = await usersRepository.update(user)
             return res.status(200).send(response)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
         }
     })
@@ -246,6 +249,7 @@ usersControllerRouter.delete('/users', json(), async (req, res) => {
         const response = await usersRepository.deleteAll()
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -298,6 +302,7 @@ usersControllerRouter.get('/users/id/:id', json(), async (req, res) => {
         const response = await usersRepository.findById(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -349,6 +354,7 @@ usersControllerRouter.get('/users/username/:username', json(), async (req, res) 
         const response = await usersRepository.findByUsername(req.params.username.toLowerCase())
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -400,6 +406,7 @@ usersControllerRouter.get('/users/email/:email', json(), async (req, res) => {
         const response = await usersRepository.findByEmail(req.params.email.toLowerCase())
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -447,6 +454,7 @@ usersControllerRouter.get('/users/logged', json(), async (req, res) => {
         const response = await usersRepository.findById(tokenPayload.id)
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -494,6 +502,7 @@ usersControllerRouter.get('/users', json(), async (req, res) => {
         const response = await usersRepository.findAll()
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -550,6 +559,7 @@ usersControllerRouter.get('/users/recover-account/:email', json(), async (req, r
             recoverAccount = new RecoverAccount(user.id, user.username.toLowerCase(), user.recoveryCode)
         return res.status(200).send(recoverAccount)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -601,6 +611,7 @@ usersControllerRouter.patch('/users/activate/:id', json(), async (req, res) => {
         const response = await usersRepository.activate(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -652,6 +663,7 @@ usersControllerRouter.patch('/users/disable/:id', json(), async (req, res) => {
         const response = await usersRepository.disable(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -702,6 +714,7 @@ usersControllerRouter.patch('/users/update-money-spent/:id', json(), async (req,
     try {
         await usersRepository.findById(req.params.id as UUID)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(404).send(err ?? new Exception(404, err.message ?? 'Not found exception'))
     }
 
@@ -709,6 +722,7 @@ usersControllerRouter.patch('/users/update-money-spent/:id', json(), async (req,
         const response = await usersRepository.updateMoneySpent(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -759,6 +773,7 @@ usersControllerRouter.patch('/users/update-publications-number/:id', json(), asy
     try {
         await usersRepository.findById(req.params.id as UUID)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(404).send(err ?? new Exception(404, err.message ?? 'Not found exception'))
     }
 
@@ -766,6 +781,7 @@ usersControllerRouter.patch('/users/update-publications-number/:id', json(), asy
         const response = await usersRepository.updatePublicationsNumber(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -837,6 +853,7 @@ usersControllerRouter.get('/users/update-password', json(),
         try {
             await usersRepository.findById(updatePassword.id)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(404).send(err ?? new Exception(404, err.message ?? 'Not found exception'))
         }
 
@@ -844,6 +861,7 @@ usersControllerRouter.get('/users/update-password', json(),
             const response = await usersRepository.updatePassword(updatePassword.id, passwordEncrypted)
             return res.status(200).send(response)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
         }
     })

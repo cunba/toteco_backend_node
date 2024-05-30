@@ -88,6 +88,7 @@ menusControllerRouter.post('/menus', json(),
             await menusRepository.save(menu)
             return res.status(201).send(menu)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
         }
 
@@ -177,6 +178,7 @@ menusControllerRouter.put('/menus', json(),
             const response = await menusRepository.update(menu)
             return res.status(200).send(response)
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
         }
     })
@@ -223,6 +225,7 @@ menusControllerRouter.delete('/menus', json(), async (req, res) => {
         const response = await menusRepository.deleteAll()
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -275,7 +278,7 @@ menusControllerRouter.get('/menus/id/:id', json(), async (req, res) => {
         const response = await menusRepository.findById(req.params.id as UUID)
         return res.status(200).send(response)
     } catch (err: any) {
-        console.log(err)
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })
@@ -323,6 +326,7 @@ menusControllerRouter.get('/menus', json(), async (req, res) => {
         const response = await menusRepository.findAll()
         return res.status(200).send(response)
     } catch (err: any) {
+        console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
     }
 })

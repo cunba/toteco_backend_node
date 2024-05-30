@@ -97,6 +97,7 @@ loginControllerRouter.post('/login', json(),
                 }
             }
         } catch (err: any) {
+            console.log(error(), apiLog(err))
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
         }
 
