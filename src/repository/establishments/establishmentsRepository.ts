@@ -15,12 +15,13 @@ export const establishmentsRepository: IEstablishmentsRepository = {
                     id,
                     name,
                     created,
+                    updated,
                     location,
                     is_open,
                     is_computer_allowed,
-                    maps_id
+                    maps_id,
                     score
-                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8)`, establishment.toArray()
+                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`, establishment.toArray()
             )
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'New Establishment data created'))
@@ -65,12 +66,13 @@ export const establishmentsRepository: IEstablishmentsRepository = {
                     id,
                     name,
                     created,
+                    updated,
                     location,
                     is_open,
                     is_computer_allowed,
-                    maps_id
+                    maps_id,
                     score
-                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8)`, establishment.toArray()
+                ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`, establishment.toArray()
             )
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Establishment found by name'))
