@@ -139,5 +139,19 @@ export const publicationsRepository: IPublicationsRepository = {
                 console.log(error(), postgresLog('Postgre', `Error finding publications`, err.stack))
                 throw new Exception(400, err.message)
             })
+    },
+
+    findTotalScoreByEstablishment: async function (establishmentId: UUID): Promise<Exception | number> {
+        return await pool
+            .query(`SELECT SUM(total_score) FROM ${schemaName} WHERE establishment_id = $1`, [establishmentId])
+            .then((res: any) => {
+                console.log(info(), postgresLog('Postgre', 'Publications found all'))
+                console.log(res.rows)
+                return res.rows[0] as number
+            })
+            .catch((err: any) => {
+                console.log(error(), postgresLog('Postgre', `Error finding publications`, err.stack))
+                throw new Exception(400, err.message)
+            })
     }
 }

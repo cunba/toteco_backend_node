@@ -123,6 +123,8 @@ publicationsControllerRouter.post('/publications', json(),
 
         try {
             await publicationsRepository.save(publication)
+            const establishmentScore = await publicationsRepository.findTotalScoreByEstablishment(establishment.id)
+            await establishmentsRepository.updateScore(establishment.id, establishmentScore as number)
             return res.status(201).send(publication)
         } catch (err: any) {
             return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))

@@ -9,4 +9,6 @@ export interface IPublicationsRepository extends IRepositery<Publication> {
 
     findByUser: (userId: UUID) => Promise<Publication[] | Exception>
 
+    findTotalScoreByEstablishment: (establishmentId: UUID) => Promise<number | Exception>
+
 }

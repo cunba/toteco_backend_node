@@ -137,5 +137,18 @@ export const establishmentsRepository: IEstablishmentsRepository = {
                 console.log(error(), postgresLog('Postgre', `Error finding establishments`, err.stack))
                 throw new Exception(400, err.message)
             })
-    }
+    },
+
+    updateScore: async function (id: UUID, score: number): Promise<Exception | boolean> {
+        return await pool
+            .query(`UPDATE ${schemaName} SET score = $2 WHERE id = $1`, [id, score])
+            .then((res: any) => {
+                console.log(info(), postgresLog('Postgre', 'Establishments found all'))
+                return true
+            })
+            .catch((err: any) => {
+                console.log(error(), postgresLog('Postgre', `Error finding establishments`, err.stack))
+                throw new Exception(400, err.message)
+            })
+    },
 }
