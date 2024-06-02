@@ -145,12 +145,11 @@ export const publicationsRepository: IPublicationsRepository = {
         return await pool
             .query(`SELECT SUM(total_score) FROM ${schemaName} WHERE establishment_id = $1`, [establishmentId])
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Publications found all'))
-                console.log(res.rows)
-                return res.rows[0] as number
+                console.log(info(), postgresLog('Postgre', 'Total score by establishment'))
+                return Number(res.rows[0].sum)
             })
             .catch((err: any) => {
-                console.log(error(), postgresLog('Postgre', `Error finding publications`, err.stack))
+                console.log(error(), postgresLog('Postgre', `Error getting total score by establishment`, err.stack))
                 throw new Exception(400, err.message)
             })
     }

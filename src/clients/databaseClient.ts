@@ -18,7 +18,7 @@ export const databaseClient = async () => {
                 name VARCHAR(30),
                 created BIGINT,
                 updated BIGINT NULL,
-                location VARCHAR(50),
+                location VARCHAR(100),
                 is_open BOOLEAN,
                 is_computer_allowed BOOLEAN,
                 maps_id VARCHAR(100),

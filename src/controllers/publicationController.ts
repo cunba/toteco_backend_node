@@ -114,8 +114,7 @@ publicationsControllerRouter.post('/publications', json(),
         )
 
         try {
-            const response = await publicationsRepository.save(publication)
-            console.log(response)
+            await publicationsRepository.save(publication)
             const establishmentScore = await publicationsRepository.findTotalScoreByEstablishment(establishment.id)
             await establishmentsRepository.updateScore(establishment.id, establishmentScore as number)
             return res.status(201).send(publication)
