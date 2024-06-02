@@ -49,8 +49,7 @@ loginControllerRouter.post('/login', json(),
     body('username').trim().notEmpty(),
     body('password').trim().notEmpty(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'Login request:'))
-        console.log('\t\t', apiLog(JSON.stringify(req.body)))
+        console.log(info(), apiLog('Api', '\t', 'Login request'))
 
         const errors: any = validationResult(req)
         if (!errors.isEmpty()) {
@@ -77,6 +76,7 @@ loginControllerRouter.post('/login', json(),
                     const tokenPayload = new TokenPayload(user[0].id, user[0].username, user[0].email, user[0].role)
                     const token = sign({ data: JSON.stringify(tokenPayload) }, 'toteco', { expiresIn: '24h' })
                     const loginResponse = new LoginResponse(token)
+                    console.log(info(), apiLog('User found, credentials ok'))
                     return res.status(200).send(loginResponse)
                 } else {
                     console.log(error(), apiLog('Invalid password'))
@@ -89,6 +89,7 @@ loginControllerRouter.post('/login', json(),
                         const tokenPayload = new TokenPayload(user[0].id, user[0].username, user[0].email, user[0].role)
                         const token = sign({ data: JSON.stringify(tokenPayload) }, 'toteco', { expiresIn: '24h' })
                         const loginResponse = new LoginResponse(token)
+                        console.log(info(), apiLog('User found, credentials ok'))
                         return res.status(200).send(loginResponse)
                     } else {
                         console.log(error(), apiLog('Invalid password'))
