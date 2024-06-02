@@ -63,8 +63,7 @@ usersControllerRouter.post('/users', json(),
     body('password').trim().notEmpty(),
     body('role').trim().notEmpty(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'New user request:'))
-        console.log('\t\t', apiLog(JSON.stringify(req.body)))
+        console.log(info(), apiLog('Api', '\t', 'New user request'))
 
         const errors: any = validationResult(req)
         if (!errors.isEmpty()) {
@@ -84,6 +83,18 @@ usersControllerRouter.post('/users', json(),
 
         const userDTO = req.body as UserDTO
         const passwordEncrypted = hashSync(userDTO.password, 10)
+
+        let userExists = await usersRepository.findByEmail(userDTO.email)
+        if (userExists instanceof Array && userExists.length > 0) {
+            console.log(error(), apiLog('User already exists'))
+            return res.status(400).send(new Exception(400, 'User already exists'))
+        } else {
+            userExists = await usersRepository.findByUsername(userDTO.username)
+            if (userExists instanceof Array && userExists.length > 0) {
+                console.log(error(), apiLog('User already exists'))
+                return res.status(400).send(new Exception(400, 'User already exists'))
+            }
+        }
 
         const user = new User(
             randomUUID(),
@@ -170,8 +181,7 @@ usersControllerRouter.put('/users', json(),
     body('password').trim().notEmpty(),
     body('role').trim().notEmpty(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'Update user request:'))
-        console.log('\t\t', apiLog(JSON.stringify(req.body)))
+        console.log(info(), apiLog('Api', '\t', 'Update user request'))
 
         const errors: any = validationResult(req)
         if (!errors.isEmpty()) {
