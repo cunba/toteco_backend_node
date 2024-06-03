@@ -83,8 +83,8 @@ export class Publication {
         this.id = publication.id
         this.created = publication.created
         this.updated = publication.updated
-        this.totalPrice = publication.totalPrice
-        this.totalScore = publication.totalScore
+        this.totalPrice = publication.total_price
+        this.totalScore = publication.total_score
         this.photo = publication.photo
         this.comment = publication.comment
         this.establishment = (await establishmentsRepository.findById(publication.establishment_id)) as Establishment

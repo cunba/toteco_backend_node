@@ -7,6 +7,7 @@ import { EstablishmentDTO } from "../model/DTO/establishmentDTO"
 import { Establishment } from "../model/establishment"
 import { Exception } from "../model/exception"
 import { establishmentsRepository } from "../repository/establishments/establishmentsRepository"
+import { productsRepository } from "../repository/products/productsRepository"
 import { publicationsRepository } from "../repository/publications/publicationsRepository"
 
 const establishmentsControllerRouter = Router()
@@ -287,8 +288,14 @@ establishmentsControllerRouter.get('/establishments/id/:id', json(), async (req,
         const response = await establishmentsRepository.findById(req.params.id as UUID)
         if (response instanceof Establishment) {
             const publications = await publicationsRepository.findByEstablishment(response.id!)
-            if (publications instanceof Array)
+            if (publications instanceof Array) {
+                for (var j = 0; j < publications.length; j++) {
+                    const products = await productsRepository.findByPublication(publications[j].id!)
+                    if (products instanceof Array)
+                        publications[j].products = products
+                }
                 response.publications = publications
+            }
             return res.status(200).send(response)
         } else {
             console.log(error(), apiLog(response))
@@ -344,8 +351,14 @@ establishmentsControllerRouter.get('/establishments', json(), async (req, res) =
         if (response instanceof Array) {
             for (var i = 0; i < response.length; i++) {
                 const publications = await publicationsRepository.findByEstablishment(response[i].id!)
-                if (publications instanceof Array)
+                if (publications instanceof Array) {
+                    for (var j = 0; j < publications.length; j++) {
+                        const products = await productsRepository.findByPublication(publications[j].id!)
+                        if (products instanceof Array)
+                            publications[j].products = products
+                    }
                     response[i].publications = publications
+                }
             }
             return res.status(200).send(response)
         } else {
@@ -406,8 +419,14 @@ establishmentsControllerRouter.get('/establishments/name/:name', json(), async (
         if (response instanceof Array) {
             for (var i = 0; i < response.length; i++) {
                 const publications = await publicationsRepository.findByEstablishment(response[i].id!)
-                if (publications instanceof Array)
+                if (publications instanceof Array) {
+                    for (var j = 0; j < publications.length; j++) {
+                        const products = await productsRepository.findByPublication(publications[j].id!)
+                        if (products instanceof Array)
+                            publications[j].products = products
+                    }
                     response[i].publications = publications
+                }
             }
             return res.status(200).send(response)
         } else {
@@ -468,8 +487,14 @@ establishmentsControllerRouter.get('/establishments/mapsId/:mapsId', json(), asy
         if (response instanceof Array) {
             for (var i = 0; i < response.length; i++) {
                 const publications = await publicationsRepository.findByEstablishment(response[i].id!)
-                if (publications instanceof Array)
+                if (publications instanceof Array) {
+                    for (var j = 0; j < publications.length; j++) {
+                        const products = await productsRepository.findByPublication(publications[j].id!)
+                        if (products instanceof Array)
+                            publications[j].products = products
+                    }
                     response[i].publications = publications
+                }
             }
             return res.status(200).send(response)
         } else {

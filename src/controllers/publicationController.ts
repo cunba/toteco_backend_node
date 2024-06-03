@@ -116,8 +116,13 @@ publicationsControllerRouter.post('/publications', json(),
 
         try {
             await publicationsRepository.save(publication)
+
             const establishmentScore = await publicationsRepository.findTotalScoreByEstablishment(establishment.id)
             await establishmentsRepository.updateScore(establishment.id, establishmentScore as number)
+
+            await usersRepository.updateMoneySpent(user.id)
+            await usersRepository.updatePublicationsNumber(user.id)
+
             return res.status(201).send(publication)
         } catch (err: any) {
             console.log(error(), apiLog(err))
