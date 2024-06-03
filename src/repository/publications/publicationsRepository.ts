@@ -143,7 +143,7 @@ export const publicationsRepository: IPublicationsRepository = {
 
     findTotalScoreByEstablishment: async function (establishmentId: UUID): Promise<Exception | number> {
         return await pool
-            .query(`SELECT SUM(total_score) FROM ${schemaName} WHERE establishment_id = $1`, [establishmentId])
+            .query(`SELECT SUM(total_score)/(SELECT COUNT(id) FROM ${schemaName} WHERE establishment_id = $1) FROM ${schemaName} WHERE establishment_id = $1`, [establishmentId])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Total score by establishment'))
                 return Number(res.rows[0].sum)
