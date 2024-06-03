@@ -7,6 +7,7 @@ import { PublicationDTO } from "../model/DTO/publicationDTO"
 import { Exception } from "../model/exception"
 import { Publication } from "../model/publication"
 import { establishmentsRepository } from "../repository/establishments/establishmentsRepository"
+import { productsRepository } from "../repository/products/productsRepository"
 import { publicationsRepository } from "../repository/publications/publicationsRepository"
 import { usersRepository } from "../repository/users/usersRepository"
 
@@ -202,7 +203,7 @@ publicationsControllerRouter.put('/publications', json(),
         const publication = req.body as Publication
 
         try {
-            await publicationsRepository.findById(publication.id)
+            await publicationsRepository.findById(publication.id!)
         } catch (err: any) {
             console.log(error(), apiLog(err))
             return res.status(404).send(err.message ?? 'Not found exception')
@@ -308,7 +309,15 @@ publicationsControllerRouter.delete('/publications', json(), async (req, res) =>
 publicationsControllerRouter.get('/publications/id/:id', json(), async (req, res) => {
     try {
         const response = await publicationsRepository.findById(req.params.id as UUID)
-        return res.status(200).send(response)
+        if (response instanceof Publication) {
+            const products = await productsRepository.findByPublication(response.id!)
+            if (products instanceof Array)
+                response.products = products
+            return res.status(200).send(response)
+        } else {
+            console.log(error(), apiLog(response))
+            return res.status(response.code).send(response)
+        }
     } catch (err: any) {
         console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -356,7 +365,17 @@ publicationsControllerRouter.get('/publications/id/:id', json(), async (req, res
 publicationsControllerRouter.get('/publications', json(), async (req, res) => {
     try {
         const response = await publicationsRepository.findAll()
-        return res.status(200).send(response)
+        if (response instanceof Array) {
+            response.map(async publication => {
+                const products = await productsRepository.findByPublication(publication.id!)
+                if (products instanceof Array)
+                    publication.products = products
+            })
+            return res.status(200).send(response)
+        } else {
+            console.log(error(), apiLog(response))
+            return res.status(response.code).send(response)
+        }
     } catch (err: any) {
         console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -411,7 +430,17 @@ publicationsControllerRouter.get('/publications', json(), async (req, res) => {
 publicationsControllerRouter.get('/publications/establishment/:id', json(), async (req, res) => {
     try {
         const response = await publicationsRepository.findByEstablishment(req.params.id as UUID)
-        return res.status(200).send(response)
+        if (response instanceof Array) {
+            response.map(async publication => {
+                const products = await productsRepository.findByPublication(publication.id!)
+                if (products instanceof Array)
+                    publication.products = products
+            })
+            return res.status(200).send(response)
+        } else {
+            console.log(error(), apiLog(response))
+            return res.status(response.code).send(response)
+        }
     } catch (err: any) {
         console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -466,7 +495,17 @@ publicationsControllerRouter.get('/publications/establishment/:id', json(), asyn
 publicationsControllerRouter.get('/publications/user/:id', json(), async (req, res) => {
     try {
         const response = await publicationsRepository.findByUser(req.params.id as UUID)
-        return res.status(200).send(response)
+        if (response instanceof Array) {
+            response.map(async publication => {
+                const products = await productsRepository.findByPublication(publication.id!)
+                if (products instanceof Array)
+                    publication.products = products
+            })
+            return res.status(200).send(response)
+        } else {
+            console.log(error(), apiLog(response))
+            return res.status(response.code).send(response)
+        }
     } catch (err: any) {
         console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))

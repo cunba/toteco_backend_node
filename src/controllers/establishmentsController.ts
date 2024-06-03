@@ -7,6 +7,7 @@ import { EstablishmentDTO } from "../model/DTO/establishmentDTO"
 import { Establishment } from "../model/establishment"
 import { Exception } from "../model/exception"
 import { establishmentsRepository } from "../repository/establishments/establishmentsRepository"
+import { publicationsRepository } from "../repository/publications/publicationsRepository"
 
 const establishmentsControllerRouter = Router()
 
@@ -176,7 +177,7 @@ establishmentsControllerRouter.put('/establishments', json(),
         const establishment = req.body as Establishment
 
         try {
-            await establishmentsRepository.findById(establishment.id)
+            await establishmentsRepository.findById(establishment.id!)
         } catch (err: any) {
             console.log(error(), apiLog(err))
             return res.status(404).send(err.message ?? 'Not found exception')
@@ -284,7 +285,15 @@ establishmentsControllerRouter.delete('/establishments', json(), async (req, res
 establishmentsControllerRouter.get('/establishments/id/:id', json(), async (req, res) => {
     try {
         const response = await establishmentsRepository.findById(req.params.id as UUID)
-        return res.status(200).send(response)
+        if (response instanceof Establishment) {
+            const publications = await publicationsRepository.findByEstablishment(response.id!)
+            if (publications instanceof Array)
+                response.publications = publications
+            return res.status(200).send(response)
+        } else {
+            console.log(error(), apiLog(response))
+            return res.status(response.code).send(response)
+        }
     } catch (err: any) {
         console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -332,7 +341,17 @@ establishmentsControllerRouter.get('/establishments/id/:id', json(), async (req,
 establishmentsControllerRouter.get('/establishments', json(), async (req, res) => {
     try {
         const response = await establishmentsRepository.findAll()
-        return res.status(200).send(response)
+        if (response instanceof Array) {
+            response.map(async establishment => {
+                const publications = await publicationsRepository.findByEstablishment(establishment.id!)
+                if (publications instanceof Array)
+                    establishment.publications = publications
+            })
+            return res.status(200).send(response)
+        } else {
+            console.log(error(), apiLog(response))
+            return res.status(response.code).send(response)
+        }
     } catch (err: any) {
         console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -384,7 +403,17 @@ establishmentsControllerRouter.get('/establishments', json(), async (req, res) =
 establishmentsControllerRouter.get('/establishments/name/:name', json(), async (req, res) => {
     try {
         const response = await establishmentsRepository.findByName(req.params.name)
-        return res.status(200).send(response)
+        if (response instanceof Array) {
+            response.map(async establishment => {
+                const publications = await publicationsRepository.findByEstablishment(establishment.id!)
+                if (publications instanceof Array)
+                    establishment.publications = publications
+            })
+            return res.status(200).send(response)
+        } else {
+            console.log(error(), apiLog(response))
+            return res.status(response.code).send(response)
+        }
     } catch (err: any) {
         console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
@@ -436,7 +465,17 @@ establishmentsControllerRouter.get('/establishments/name/:name', json(), async (
 establishmentsControllerRouter.get('/establishments/mapsId/:mapsId', json(), async (req, res) => {
     try {
         const response = await establishmentsRepository.findByMapsId(req.params.mapsId)
-        return res.status(200).send(response)
+        if (response instanceof Array) {
+            response.map(async establishment => {
+                const publications = await publicationsRepository.findByEstablishment(establishment.id!)
+                if (publications instanceof Array)
+                    establishment.publications = publications
+            })
+            return res.status(200).send(response)
+        } else {
+            console.log(error(), apiLog(response))
+            return res.status(response.code).send(response)
+        }
     } catch (err: any) {
         console.log(error(), apiLog(err))
         return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))

@@ -39,38 +39,38 @@ import { UUID } from "crypto"
  *                  type: number
  */
 export class User {
-    id: UUID
-    username: string
-    name: string
-    surname: string
-    birthDate: number
-    email: string
-    password: string
-    created: number
-    updated: number | null
-    photo: any
-    isActive: boolean
-    moneySpent: number
-    publicationsNumber: number
-    role: string
-    recoveryCode: number | null
+    id?: UUID
+    username?: string
+    name?: string
+    surname?: string
+    birthDate?: number
+    email?: string
+    password?: string
+    created?: number
+    updated?: number | null
+    photo?: any
+    isActive?: boolean
+    moneySpent?: number
+    publicationsNumber?: number
+    role?: string
+    recoveryCode?: number | null
 
     constructor(
-        id: UUID,
-        username: string,
-        name: string,
-        surname: string,
-        birthDate: number,
-        email: string,
-        password: string,
-        created: number,
-        updated: number | null,
-        photo: any,
-        isActive: boolean,
-        moneySpent: number,
-        publicationsNumber: number,
-        role: string,
-        recoveryCode: number | null
+        id?: UUID,
+        username?: string,
+        name?: string,
+        surname?: string,
+        birthDate?: number,
+        email?: string,
+        password?: string,
+        created?: number,
+        updated?: number | null,
+        photo?: any,
+        isActive?: boolean,
+        moneySpent?: number,
+        publicationsNumber?: number,
+        role?: string,
+        recoveryCode?: number | null
     ) {
         this.id = id
         this.username = username
@@ -107,5 +107,23 @@ export class User {
             this.role,
             this.recoveryCode
         ]
+    }
+
+    fromPostgre(user: any) {
+        this.id = user.id
+        this.username = user.username
+        this.name = user.name
+        this.surname = user.surname
+        this.birthDate = user.birth_date
+        this.email = user.email
+        this.password = user.password
+        this.created = user.created
+        this.updated = user.updated
+        this.photo = user.photo
+        this.isActive = user.is_active
+        this.moneySpent = user.money_spent
+        this.publicationsNumber = user.publications_number
+        this.role = user.role
+        this.recoveryCode = user.recovery_code
     }
 }

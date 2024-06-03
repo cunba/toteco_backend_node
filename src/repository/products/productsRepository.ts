@@ -92,7 +92,9 @@ export const productsRepository: IProductsRepository = {
                     throw new Exception(404, 'Not found exception')
                 }
                 console.log(info(), postgresLog('Postgre', `Product found by id ${id}`))
-                return res.rows[0] as Product
+                const product = new Product()
+                product.fromPostgre(res.rows[0])
+                return product
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding product by id ${id}`, err.stack))
@@ -103,11 +105,17 @@ export const productsRepository: IProductsRepository = {
     },
 
     findByMenu: async function (menuId: string): Promise<Exception | Product[]> {
+        const products: Product[] = []
         return await pool
             .query(`SELECT * FROM ${schemaName} WHERE menu_id = $1`, [menuId])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Products found by menu ID'))
-                return res.rows as Product[]
+                res.rows.map((row: any) => {
+                    const product = new Product()
+                    product.fromPostgre(row)
+                    products.push(product)
+                })
+                return products
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding publications by menu ID`, err.stack))
@@ -116,11 +124,17 @@ export const productsRepository: IProductsRepository = {
     },
 
     findByPublication: async function (publicationId: string): Promise<Exception | Product[]> {
+        const products: Product[] = []
         return await pool
             .query(`SELECT * FROM ${schemaName} WHERE publication_id = $1`, [publicationId])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Products found by publication ID'))
-                return res.rows as Product[]
+                res.rows.map((row: any) => {
+                    const product = new Product()
+                    product.fromPostgre(row)
+                    products.push(product)
+                })
+                return products
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding products by publication ID`, err.stack))
@@ -129,11 +143,17 @@ export const productsRepository: IProductsRepository = {
     },
 
     findAll: async function (): Promise<Exception | Product[]> {
+        const products: Product[] = []
         return await pool
             .query(`SELECT * FROM ${schemaName}`)
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Products found all'))
-                return res.rows as Product[]
+                res.rows.map((row: any) => {
+                    const product = new Product()
+                    product.fromPostgre(row)
+                    products.push(product)
+                })
+                return products
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding products`, err.stack))

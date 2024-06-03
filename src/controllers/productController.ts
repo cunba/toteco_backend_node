@@ -200,7 +200,7 @@ productsControllerRouter.put('/products', json(),
         const product = req.body as Product
 
         try {
-            await productsRepository.findById(product.id)
+            await productsRepository.findById(product.id!)
         } catch (err: any) {
             console.log(error(), apiLog(err))
             return res.status(404).send(err.message ?? 'Not found exception')

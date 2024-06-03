@@ -29,25 +29,25 @@ import { Publication } from "./publication"
  *                  $ref: '#/components/schemas/Menu'
  */
 export class Product {
-    id: UUID
-    name: string
-    created: number
-    updated: number | null
-    inMenu: boolean
-    price: number
-    score: number
-    publication: Publication
+    id?: UUID
+    name?: string
+    created?: number
+    updated?: number | null
+    inMenu?: boolean
+    price?: number
+    score?: number
+    publication?: Publication
     menu?: Menu
 
     constructor(
-        id: UUID,
-        name: string,
-        created: number,
-        updated: number | null,
-        inMenu: boolean,
-        price: number,
-        score: number,
-        publication: Publication,
+        id?: UUID,
+        name?: string,
+        created?: number,
+        updated?: number | null,
+        inMenu?: boolean,
+        price?: number,
+        score?: number,
+        publication?: Publication,
         menu?: Menu
     ) {
         this.id = id
@@ -70,8 +70,18 @@ export class Product {
             this.inMenu,
             this.price,
             this.score,
-            this.publication.id,
+            this.publication!.id,
             this.menu ? this.menu.id : null
         ]
+    }
+
+    fromPostgre(product: any) {
+        this.id = product.id
+        this.name = product.name
+        this.created = product.created
+        this.updated = product.updated
+        this.inMenu = product.in_menu
+        this.price = product.price
+        this.score = product.score
     }
 }

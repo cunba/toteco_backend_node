@@ -32,27 +32,27 @@ import { Publication } from "./publication"
  *                      $ref: '#/components/schemas/Product'
  */
 export class Establishment {
-    id: UUID
-    name: string
-    created: number
-    updated: number | null
-    location: string
-    isOpen: boolean
-    isComputerAllowed: boolean
-    mapsId: string
-    score: number
+    id?: UUID
+    name?: string
+    created?: number
+    updated?: number | null
+    location?: string
+    isOpen?: boolean
+    isComputerAllowed?: boolean
+    mapsId?: string
+    score?: number
     publications?: Publication[]
 
     constructor(
-        id: UUID,
-        name: string,
-        created: number,
-        updated: number | null,
-        location: string,
-        isOpen: boolean,
-        isComputerAllowed: boolean,
-        mapsId: string,
-        score: number,
+        id?: UUID,
+        name?: string,
+        created?: number,
+        updated?: number | null,
+        location?: string,
+        isOpen?: boolean,
+        isComputerAllowed?: boolean,
+        mapsId?: string,
+        score?: number,
         publications?: Publication[]
     ) {
         this.id = id
@@ -79,5 +79,17 @@ export class Establishment {
             this.mapsId,
             this.score
         ]
+    }
+
+    fromPostgre(establishment: any) {
+        this.id = establishment.id
+        this.name = establishment.name
+        this.created = establishment.created
+        this.updated = establishment.updated
+        this.location = establishment.location
+        this.isOpen = establishment.is_open
+        this.isComputerAllowed = establishment.is_computer_allowed
+        this.mapsId = establishment.maps_id
+        this.score = establishment.score
     }
 }

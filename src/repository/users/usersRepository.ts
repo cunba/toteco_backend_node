@@ -103,7 +103,9 @@ export const usersRepository: IUsersRepository = {
                     throw new Exception(404, 'Not found exception')
                 }
                 console.log(info(), postgresLog('Postgre', `User found by id ${id}`))
-                return res.rows[0] as User
+                const user = new User()
+                user.fromPostgre(res.rows[0])
+                return user
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding user by id ${id}`, err.stack))
@@ -114,11 +116,17 @@ export const usersRepository: IUsersRepository = {
     },
 
     findByUsername: async function (username: string): Promise<Exception | User[]> {
+        const users: User[] = []
         return await pool
             .query(`SELECT * FROM ${schemaName} WHERE username = $1`, [username])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'User found by username'))
-                return res.rows as User[]
+                res.rows.map((row: any) => {
+                    const user = new User()
+                    user.fromPostgre(row)
+                    users.push(user)
+                })
+                return users
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding user by username`, err.stack))
@@ -127,11 +135,17 @@ export const usersRepository: IUsersRepository = {
     },
 
     findByEmail: async function (email: string): Promise<Exception | User[]> {
+        const users: User[] = []
         return await pool
             .query(`SELECT * FROM ${schemaName} WHERE email = $1`, [email])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'User found by email'))
-                return res.rows as User[]
+                res.rows.map((row: any) => {
+                    const user = new User()
+                    user.fromPostgre(row)
+                    users.push(user)
+                })
+                return users
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding user by username`, err.stack))
@@ -140,11 +154,17 @@ export const usersRepository: IUsersRepository = {
     },
 
     findAll: async function (): Promise<Exception | User[]> {
+        const users: User[] = []
         return await pool
             .query(`SELECT * FROM ${schemaName}`)
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Users found all'))
-                return res.rows as User[]
+                res.rows.map((row: any) => {
+                    const user = new User()
+                    user.fromPostgre(row)
+                    users.push(user)
+                })
+                return users
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding users`, err.stack))

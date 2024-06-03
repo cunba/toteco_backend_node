@@ -202,7 +202,7 @@ usersControllerRouter.put('/users', json(),
         const user = req.body as User
 
         try {
-            await usersRepository.findById(user.id)
+            await usersRepository.findById(user.id!)
         } catch (err: any) {
             console.log(error(), apiLog(err))
             return res.status(404).send(err ?? new Exception(404, err.message ?? 'Not found exception'))
@@ -566,7 +566,7 @@ usersControllerRouter.get('/users/recover-account/:email', json(), async (req, r
         const user = await usersRepository.findByEmail(req.params.email.toLowerCase())
         let recoverAccount = null
         if (user instanceof User)
-            recoverAccount = new RecoverAccount(user.id, user.username.toLowerCase(), user.recoveryCode)
+            recoverAccount = new RecoverAccount(user.id!, user.username!.toLowerCase(), user.recoveryCode!)
         return res.status(200).send(recoverAccount)
     } catch (err: any) {
         console.log(error(), apiLog(err))

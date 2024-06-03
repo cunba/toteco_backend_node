@@ -34,11 +34,17 @@ export const establishmentsRepository: IEstablishmentsRepository = {
     },
 
     findByName: async function (name: string): Promise<Exception | Establishment[]> {
+        const establishments: Establishment[] = []
         return await pool
             .query(`SELECT * FROM ${schemaName} WHERE name = $1`, [name])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Establishment found by name'))
-                return res.rows as Establishment[]
+                res.rows.map((row: any) => {
+                    const establishment = new Establishment()
+                    establishment.fromPostgre(row)
+                    establishments.push(establishment)
+                })
+                return establishments
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding establishment by name`, err.stack))
@@ -47,11 +53,17 @@ export const establishmentsRepository: IEstablishmentsRepository = {
     },
 
     findByMapsId: async function (mapsId: string): Promise<Exception | Establishment[]> {
+        const establishments: Establishment[] = []
         return await pool
             .query(`SELECT * FROM ${schemaName} WHERE maps_id = $1`, [mapsId])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Establishment found by maps ID'))
-                return res.rows as Establishment[]
+                res.rows.map((row: any) => {
+                    const establishment = new Establishment()
+                    establishment.fromPostgre(row)
+                    establishments.push(establishment)
+                })
+                return establishments
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding establishment by maps ID`, err.stack))
@@ -118,7 +130,9 @@ export const establishmentsRepository: IEstablishmentsRepository = {
                     throw new Exception(404, 'Not found exception')
                 }
                 console.log(info(), postgresLog('Postgre', `Establishment found by id ${id}`))
-                return res.rows[0] as Establishment
+                const establishment = new Establishment()
+                establishment.fromPostgre(res.rows[0])
+                return establishment
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding establishment by id ${id}`, err.stack))
@@ -129,11 +143,17 @@ export const establishmentsRepository: IEstablishmentsRepository = {
     },
 
     findAll: async function (): Promise<Exception | Establishment[]> {
+        const establishments: Establishment[] = []
         return await pool
             .query(`SELECT * FROM ${schemaName}`)
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Establishments found all'))
-                return res.rows as Establishment[]
+                res.rows.map((row: any) => {
+                    const establishment = new Establishment()
+                    establishment.fromPostgre(row)
+                    establishments.push(establishment)
+                })
+                return establishments
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding establishments`, err.stack))

@@ -92,7 +92,9 @@ export const publicationsRepository: IPublicationsRepository = {
                     throw new Exception(404, 'Not found exception')
                 }
                 console.log(info(), postgresLog('Postgre', `Publication found by id ${id}`))
-                return res.rows[0] as Publication
+                const publication = new Publication()
+                publication.fromPostgre(res.rows[0])
+                return publication
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding publication by id ${id}`, err.stack))
@@ -103,11 +105,17 @@ export const publicationsRepository: IPublicationsRepository = {
     },
 
     findByEstablishment: async function (establishmentId: string): Promise<Exception | Publication[]> {
+        const publications: Publication[] = []
         return await pool
             .query(`SELECT * FROM ${schemaName} WHERE establishment_id = $1`, [establishmentId])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Publications found by establishment ID'))
-                return res.rows as Publication[]
+                res.rows.map((row: any) => {
+                    const publication = new Publication()
+                    publication.fromPostgre(row)
+                    publications.push(publication)
+                })
+                return publications
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding publications by establishment ID`, err.stack))
@@ -116,11 +124,17 @@ export const publicationsRepository: IPublicationsRepository = {
     },
 
     findByUser: async function (userId: string): Promise<Exception | Publication[]> {
+        const publications: Publication[] = []
         return await pool
             .query(`SELECT * FROM ${schemaName} WHERE user_id = $1`, [userId])
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Publications found by user ID'))
-                return res.rows as Publication[]
+                res.rows.map((row: any) => {
+                    const publication = new Publication()
+                    publication.fromPostgre(row)
+                    publications.push(publication)
+                })
+                return publications
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding publications by user ID`, err.stack))
@@ -129,11 +143,17 @@ export const publicationsRepository: IPublicationsRepository = {
     },
 
     findAll: async function (): Promise<Exception | Publication[]> {
+        const publications: Publication[] = []
         return await pool
             .query(`SELECT * FROM ${schemaName}`)
             .then((res: any) => {
                 console.log(info(), postgresLog('Postgre', 'Publications found all'))
-                return res.rows as Publication[]
+                res.rows.map((row: any) => {
+                    const publication = new Publication()
+                    publication.fromPostgre(row)
+                    publications.push(publication)
+                })
+                return publications
             })
             .catch((err: any) => {
                 console.log(error(), postgresLog('Postgre', `Error finding publications`, err.stack))
