@@ -366,11 +366,11 @@ publicationsControllerRouter.get('/publications', json(), async (req, res) => {
     try {
         const response = await publicationsRepository.findAll()
         if (response instanceof Array) {
-            response.map(async publication => {
-                const products = await productsRepository.findByPublication(publication.id!)
+            for (var i = 0; i < response.length; i++) {
+                const products = await productsRepository.findByPublication(response[i].id!)
                 if (products instanceof Array)
-                    publication.products = products
-            })
+                    response[i].products = products
+            }
             return res.status(200).send(response)
         } else {
             console.log(error(), apiLog(response))
@@ -431,11 +431,11 @@ publicationsControllerRouter.get('/publications/establishment/:id', json(), asyn
     try {
         const response = await publicationsRepository.findByEstablishment(req.params.id as UUID)
         if (response instanceof Array) {
-            response.map(async publication => {
-                const products = await productsRepository.findByPublication(publication.id!)
+            for (var i = 0; i < response.length; i++) {
+                const products = await productsRepository.findByPublication(response[i].id!)
                 if (products instanceof Array)
-                    publication.products = products
-            })
+                    response[i].products = products
+            }
             return res.status(200).send(response)
         } else {
             console.log(error(), apiLog(response))
@@ -496,11 +496,11 @@ publicationsControllerRouter.get('/publications/user/:id', json(), async (req, r
     try {
         const response = await publicationsRepository.findByUser(req.params.id as UUID)
         if (response instanceof Array) {
-            response.map(async publication => {
-                const products = await productsRepository.findByPublication(publication.id!)
+            for (var i = 0; i < response.length; i++) {
+                const products = await productsRepository.findByPublication(response[i].id!)
                 if (products instanceof Array)
-                    publication.products = products
-            })
+                    response[i].products = products
+            }
             return res.status(200).send(response)
         } else {
             console.log(error(), apiLog(response))

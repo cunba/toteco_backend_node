@@ -342,11 +342,11 @@ establishmentsControllerRouter.get('/establishments', json(), async (req, res) =
     try {
         const response = await establishmentsRepository.findAll()
         if (response instanceof Array) {
-            response.map(async establishment => {
-                const publications = await publicationsRepository.findByEstablishment(establishment.id!)
+            for (var i = 0; i < response.length; i++) {
+                const publications = await publicationsRepository.findByEstablishment(response[i].id!)
                 if (publications instanceof Array)
-                    establishment.publications = publications
-            })
+                    response[i].publications = publications
+            }
             return res.status(200).send(response)
         } else {
             console.log(error(), apiLog(response))
@@ -404,11 +404,11 @@ establishmentsControllerRouter.get('/establishments/name/:name', json(), async (
     try {
         const response = await establishmentsRepository.findByName(req.params.name)
         if (response instanceof Array) {
-            response.map(async establishment => {
-                const publications = await publicationsRepository.findByEstablishment(establishment.id!)
+            for (var i = 0; i < response.length; i++) {
+                const publications = await publicationsRepository.findByEstablishment(response[i].id!)
                 if (publications instanceof Array)
-                    establishment.publications = publications
-            })
+                    response[i].publications = publications
+            }
             return res.status(200).send(response)
         } else {
             console.log(error(), apiLog(response))
@@ -466,11 +466,11 @@ establishmentsControllerRouter.get('/establishments/mapsId/:mapsId', json(), asy
     try {
         const response = await establishmentsRepository.findByMapsId(req.params.mapsId)
         if (response instanceof Array) {
-            response.map(async establishment => {
-                const publications = await publicationsRepository.findByEstablishment(establishment.id!)
+            for (var i = 0; i < response.length; i++) {
+                const publications = await publicationsRepository.findByEstablishment(response[i].id!)
                 if (publications instanceof Array)
-                    establishment.publications = publications
-            })
+                    response[i].publications = publications
+            }
             return res.status(200).send(response)
         } else {
             console.log(error(), apiLog(response))
