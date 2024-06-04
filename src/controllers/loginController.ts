@@ -3,7 +3,7 @@ import { json } from "body-parser"
 import { Router } from "express"
 import { body, ValidationError, validationResult } from "express-validator"
 import { sign } from "jsonwebtoken"
-import { apiLog, error, info } from "../constants/constants"
+import { apiLog, error, infoLog } from "../constants/constants"
 import { Exception } from "../model/exception"
 import { LoginRequest } from "../model/utils/loginRequest"
 import { LoginResponse } from "../model/utils/loginResponse"
@@ -49,7 +49,7 @@ loginControllerRouter.post('/login', json(),
     body('username').trim().notEmpty(),
     body('password').trim().notEmpty(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'Login request'))
+        console.log(infoLog(), apiLog('Api', '\t', 'Login request'))
 
         const errors: any = validationResult(req)
         if (!errors.isEmpty()) {
@@ -76,7 +76,7 @@ loginControllerRouter.post('/login', json(),
                     const tokenPayload = new TokenPayload(user[0].id!, user[0].username!, user[0].email!, user[0].role!)
                     const token = sign({ data: JSON.stringify(tokenPayload) }, 'toteco', { expiresIn: '24h' })
                     const loginResponse = new LoginResponse(token)
-                    console.log(info(), apiLog('User found, credentials ok'))
+                    console.log(infoLog(), apiLog('User found, credentials ok'))
                     return res.status(200).send(loginResponse)
                 } else {
                     console.log(error(), apiLog('Invalid password'))
@@ -89,7 +89,7 @@ loginControllerRouter.post('/login', json(),
                         const tokenPayload = new TokenPayload(user[0].id!, user[0].username!, user[0].email!, user[0].role!)
                         const token = sign({ data: JSON.stringify(tokenPayload) }, 'toteco', { expiresIn: '24h' })
                         const loginResponse = new LoginResponse(token)
-                        console.log(info(), apiLog('User found, credentials ok'))
+                        console.log(infoLog(), apiLog('User found, credentials ok'))
                         return res.status(200).send(loginResponse)
                     } else {
                         console.log(error(), apiLog('Invalid password'))

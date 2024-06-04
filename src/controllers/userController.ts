@@ -1,10 +1,11 @@
 import { hashSync } from "bcrypt"
 import { json } from "body-parser"
-import { randomUUID, UUID } from "crypto"
+import { randomInt, randomUUID, UUID } from "crypto"
 import { Router } from "express"
 import { body, ValidationError, validationResult } from "express-validator"
 import { decode } from "jsonwebtoken"
-import { apiLog, error, info } from "../constants/constants"
+import { createTransport } from "nodemailer"
+import { apiLog, error, infoLog } from "../constants/constants"
 import { UserDTO } from "../model/DTO/userDTO"
 import { Exception } from "../model/exception"
 import { User } from "../model/user"
@@ -14,6 +15,16 @@ import { UpdatePassword } from "../model/utils/updatePassword"
 import { usersRepository } from "../repository/users/usersRepository"
 
 const usersControllerRouter = Router()
+
+const transporter = createTransport({
+    host: 'smtp.ethereal.email',
+    port: 587,
+    secure: false,
+    auth: {
+        user: 'veda28@ethereal.email',
+        pass: '7Y17yEurnjVArsGGpJ'
+    }
+});
 
 /**
  * @openapi
@@ -63,7 +74,7 @@ usersControllerRouter.post('/users', json(),
     body('password').trim().notEmpty(),
     body('role').trim().notEmpty(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'New user request'))
+        console.log(infoLog(), apiLog('Api', '\t', 'New user request'))
 
         const errors: any = validationResult(req)
         if (!errors.isEmpty()) {
@@ -111,8 +122,15 @@ usersControllerRouter.post('/users', json(),
             0,
             0,
             userDTO.role,
-            null
+            randomInt(10000, 100000)
         )
+
+        await transporter.sendMail({
+            from: '"TOTECO" <veda28@ethereal.email>', // sender address
+            to: userDTO.email, // list of receivers
+            subject: "CODE", // Subject line
+            text: `The code is: ${user.recoveryCode}`, // plain text body
+        });
 
         try {
             await usersRepository.save(user)
@@ -181,7 +199,7 @@ usersControllerRouter.put('/users', json(),
     body('password').trim().notEmpty(),
     body('role').trim().notEmpty(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'Update user request'))
+        console.log(infoLog(), apiLog('Api', '\t', 'Update user request'))
 
         const errors: any = validationResult(req)
         if (!errors.isEmpty()) {
@@ -789,6 +807,74 @@ usersControllerRouter.patch('/users/update-publications-number/:id', json(), asy
 
     try {
         const response = await usersRepository.updatePublicationsNumber(req.params.id as UUID)
+        return res.status(200).send(response)
+    } catch (err: any) {
+        console.log(error(), apiLog(err))
+        return res.status(err.code ?? 500).send(err ?? new Exception(500, 'Internal server error'))
+    }
+})
+
+/**
+ * @openapi
+ * /users/update-recovery-code/{id}/{code}:
+ *  patch:
+ *      security:
+ *      - BearerAuth: []
+ *      description: Update recovery code
+ *      operationId: updateRecoveryCode
+ *      tags:
+ *      - Users
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            required: true
+ *            schema:
+ *                type: string
+ *          - in: path
+ *            name: code
+ *            required: true
+ *            schema:
+ *                type: string
+ *      responses:
+ *          200:
+ *              description: SUCCESS
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: string
+ *          400:
+ *              description: BAD REQUEST
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Exception'
+ *          401:
+ *              description: UNAUTHORIZED
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Exception'
+ *          500:
+ *              description: INTERNAL SERVER ERROR
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Exception'
+ */
+usersControllerRouter.patch('/users/update-recovery-code/:id/:code', json(), async (req, res) => {
+    try {
+        await usersRepository.findById(req.params.id as UUID)
+    } catch (err: any) {
+        console.log(error(), apiLog(err))
+        return res.status(404).send(err ?? new Exception(404, err.message ?? 'Not found exception'))
+    }
+
+    try {
+        let response
+        if (Number(req.params.code) === 0)
+            response = await usersRepository.updateRecoveryCode(req.params.id as UUID, undefined)
+        else
+            response = await usersRepository.updateRecoveryCode(req.params.id as UUID, Number(req.params.code))
         return res.status(200).send(response)
     } catch (err: any) {
         console.log(error(), apiLog(err))

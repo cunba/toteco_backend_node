@@ -1,6 +1,6 @@
 import { UUID } from "crypto"
 import { pool } from "../../clients/databaseClient"
-import { error, info, postgresLog } from "../../constants/constants"
+import { error, infoLog, postgresLog } from "../../constants/constants"
 import { Establishment } from "../../model/establishment"
 import { Exception } from "../../model/exception"
 import { IEstablishmentsRepository } from "./iEstablishmentsRepository"
@@ -24,7 +24,7 @@ export const establishmentsRepository: IEstablishmentsRepository = {
                 ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`, establishment.toArray()
             )
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'New Establishment data created'))
+                console.log(infoLog(), postgresLog('Postgre', 'New Establishment data created'))
                 return new Exception(200, 'SUCCESS')
             })
             .catch((err: any) => {
@@ -38,7 +38,7 @@ export const establishmentsRepository: IEstablishmentsRepository = {
         return await pool
             .query(`SELECT * FROM ${schemaName} WHERE name = $1`, [name])
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Establishment found by name'))
+                console.log(infoLog(), postgresLog('Postgre', 'Establishment found by name'))
                 res.rows.map((row: any) => {
                     const establishment = new Establishment()
                     establishment.fromPostgre(row)
@@ -57,7 +57,7 @@ export const establishmentsRepository: IEstablishmentsRepository = {
         return await pool
             .query(`SELECT * FROM ${schemaName} WHERE maps_id = $1`, [mapsId])
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Establishment found by maps ID'))
+                console.log(infoLog(), postgresLog('Postgre', 'Establishment found by maps ID'))
                 res.rows.map((row: any) => {
                     const establishment = new Establishment()
                     establishment.fromPostgre(row)
@@ -87,7 +87,7 @@ export const establishmentsRepository: IEstablishmentsRepository = {
                 ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`, establishment.toArray()
             )
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Establishment found by name'))
+                console.log(infoLog(), postgresLog('Postgre', 'Establishment found by name'))
                 return res.rowCount
             })
             .catch((err: any) => {
@@ -100,7 +100,7 @@ export const establishmentsRepository: IEstablishmentsRepository = {
         return await pool
             .query(`DELETE FROM ${schemaName} WHERE id = $1`, [id])
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', id, '\t', 'Establishment deleted'))
+                console.log(infoLog(), postgresLog('Postgre', id, '\t', 'Establishment deleted'))
                 return res.rowCount
             })
             .catch((err: any) => {
@@ -113,7 +113,7 @@ export const establishmentsRepository: IEstablishmentsRepository = {
         return await pool
             .query(`DELETE FROM ${schemaName}`)
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Deleted all establishments'))
+                console.log(infoLog(), postgresLog('Postgre', 'Deleted all establishments'))
                 return res.rowCount
             })
             .catch((err: any) => {
@@ -129,7 +129,7 @@ export const establishmentsRepository: IEstablishmentsRepository = {
                 if (res.rows.length === 0) {
                     throw new Exception(404, 'Not found exception')
                 }
-                console.log(info(), postgresLog('Postgre', `Establishment found by id ${id}`))
+                console.log(infoLog(), postgresLog('Postgre', `Establishment found by id ${id}`))
                 const establishment = new Establishment()
                 establishment.fromPostgre(res.rows[0])
                 return establishment
@@ -147,7 +147,7 @@ export const establishmentsRepository: IEstablishmentsRepository = {
         return await pool
             .query(`SELECT * FROM ${schemaName}`)
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Establishments found all'))
+                console.log(infoLog(), postgresLog('Postgre', 'Establishments found all'))
                 res.rows.map((row: any) => {
                     const establishment = new Establishment()
                     establishment.fromPostgre(row)
@@ -165,7 +165,7 @@ export const establishmentsRepository: IEstablishmentsRepository = {
         return await pool
             .query(`UPDATE ${schemaName} SET score = $2 WHERE id = $1`, [id, score])
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Establishments found all'))
+                console.log(infoLog(), postgresLog('Postgre', 'Establishments found all'))
                 return true
             })
             .catch((err: any) => {

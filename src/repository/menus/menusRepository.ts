@@ -1,6 +1,6 @@
 import { UUID } from "crypto"
 import { pool } from "../../clients/databaseClient"
-import { error, info, postgresLog } from "../../constants/constants"
+import { error, infoLog, postgresLog } from "../../constants/constants"
 import { Exception } from "../../model/exception"
 import { Menu } from "../../model/menu"
 import { IMenusRepository } from "./iMenusRepository"
@@ -21,7 +21,7 @@ export const menusRepository: IMenusRepository = {
                 ) VALUES($1, $2, $3, $4, $5, $6)`, menu.toArray()
             )
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'New Menu data created'))
+                console.log(infoLog(), postgresLog('Postgre', 'New Menu data created'))
                 return new Exception(200, 'SUCCESS')
             })
             .catch((err: any) => {
@@ -43,7 +43,7 @@ export const menusRepository: IMenusRepository = {
                 ) VALUES($1, $2, $3, $4, $5, $6)`, menu.toArray()
             )
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Menu found by name'))
+                console.log(infoLog(), postgresLog('Postgre', 'Menu found by name'))
                 return res.rowCount
             })
             .catch((err: any) => {
@@ -56,7 +56,7 @@ export const menusRepository: IMenusRepository = {
         return await pool
             .query(`DELETE FROM ${schemaName} WHERE id = $1`, [id])
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', id, '\t', 'Menu deleted'))
+                console.log(infoLog(), postgresLog('Postgre', id, '\t', 'Menu deleted'))
                 return res.rowCount
             })
             .catch((err: any) => {
@@ -69,7 +69,7 @@ export const menusRepository: IMenusRepository = {
         return await pool
             .query(`DELETE FROM ${schemaName}`)
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Deleted all menus'))
+                console.log(infoLog(), postgresLog('Postgre', 'Deleted all menus'))
                 return res.rowCount
             })
             .catch((err: any) => {
@@ -85,7 +85,7 @@ export const menusRepository: IMenusRepository = {
                 if (res.rows.length === 0) {
                     throw new Exception(404, 'Not found exception')
                 }
-                console.log(info(), postgresLog('Postgre', `Menu found by id ${id}`))
+                console.log(infoLog(), postgresLog('Postgre', `Menu found by id ${id}`))
                 return res.rows[0] as Menu
             })
             .catch((err: any) => {
@@ -100,7 +100,7 @@ export const menusRepository: IMenusRepository = {
         return await pool
             .query(`SELECT * FROM ${schemaName}`)
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Menus found all'))
+                console.log(infoLog(), postgresLog('Postgre', 'Menus found all'))
                 return res.rows as Menu[]
             })
             .catch((err: any) => {

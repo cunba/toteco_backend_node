@@ -2,7 +2,7 @@ import { json } from "body-parser"
 import { randomUUID, UUID } from "crypto"
 import { Router } from "express"
 import { body, ValidationError, validationResult } from "express-validator"
-import { apiLog, error, info } from "../constants/constants"
+import { apiLog, error, infoLog } from "../constants/constants"
 import { PublicationDTO } from "../model/DTO/publicationDTO"
 import { Exception } from "../model/exception"
 import { Publication } from "../model/publication"
@@ -61,7 +61,7 @@ publicationsControllerRouter.post('/publications', json(),
     body('establishmentId').trim().notEmpty(),
     body('userId').trim().notEmpty(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'New publication request:'))
+        console.log(infoLog(), apiLog('Api', '\t', 'New publication request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
 
         const errors: any = validationResult(req)
@@ -186,7 +186,7 @@ publicationsControllerRouter.put('/publications', json(),
     body('establishmentId').trim().notEmpty(),
     body('userId').trim().notEmpty(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'Update publication request:'))
+        console.log(infoLog(), apiLog('Api', '\t', 'Update publication request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
 
         const errors: any = validationResult(req)

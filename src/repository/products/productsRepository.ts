@@ -1,6 +1,6 @@
 import { UUID } from "crypto"
 import { pool } from "../../clients/databaseClient"
-import { error, info, postgresLog } from "../../constants/constants"
+import { error, infoLog, postgresLog } from "../../constants/constants"
 import { Exception } from "../../model/exception"
 import { Product } from "../../model/product"
 import { IProductsRepository } from "./iProductsRepository"
@@ -24,7 +24,7 @@ export const productsRepository: IProductsRepository = {
                 ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`, product.toArray()
             )
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'New Product data created'))
+                console.log(infoLog(), postgresLog('Postgre', 'New Product data created'))
                 return new Exception(200, 'SUCCESS')
             })
             .catch((err: any) => {
@@ -49,7 +49,7 @@ export const productsRepository: IProductsRepository = {
                 ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`, product.toArray()
             )
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Product found by name'))
+                console.log(infoLog(), postgresLog('Postgre', 'Product found by name'))
                 return res.rowCount
             })
             .catch((err: any) => {
@@ -62,7 +62,7 @@ export const productsRepository: IProductsRepository = {
         return await pool
             .query(`DELETE FROM ${schemaName} WHERE id = $1`, [id])
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', id, '\t', 'Product deleted'))
+                console.log(infoLog(), postgresLog('Postgre', id, '\t', 'Product deleted'))
                 return res.rowCount
             })
             .catch((err: any) => {
@@ -75,7 +75,7 @@ export const productsRepository: IProductsRepository = {
         return await pool
             .query(`DELETE FROM ${schemaName}`)
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Deleted all products'))
+                console.log(infoLog(), postgresLog('Postgre', 'Deleted all products'))
                 return res.rowCount
             })
             .catch((err: any) => {
@@ -91,7 +91,7 @@ export const productsRepository: IProductsRepository = {
                 if (res.rows.length === 0) {
                     throw new Exception(404, 'Not found exception')
                 }
-                console.log(info(), postgresLog('Postgre', `Product found by id ${id}`))
+                console.log(infoLog(), postgresLog('Postgre', `Product found by id ${id}`))
                 const product = new Product()
                 product.fromPostgre(res.rows[0])
                 return product
@@ -109,7 +109,7 @@ export const productsRepository: IProductsRepository = {
         return await pool
             .query(`SELECT * FROM ${schemaName} WHERE menu_id = $1`, [menuId])
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Products found by menu ID'))
+                console.log(infoLog(), postgresLog('Postgre', 'Products found by menu ID'))
                 res.rows.map((row: any) => {
                     const product = new Product()
                     product.fromPostgre(row)
@@ -128,7 +128,7 @@ export const productsRepository: IProductsRepository = {
         return await pool
             .query(`SELECT * FROM ${schemaName} WHERE publication_id = $1`, [publicationId])
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Products found by publication ID'))
+                console.log(infoLog(), postgresLog('Postgre', 'Products found by publication ID'))
                 res.rows.map((row: any) => {
                     const product = new Product()
                     product.fromPostgre(row)
@@ -147,7 +147,7 @@ export const productsRepository: IProductsRepository = {
         return await pool
             .query(`SELECT * FROM ${schemaName}`)
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Products found all'))
+                console.log(infoLog(), postgresLog('Postgre', 'Products found all'))
                 res.rows.map((row: any) => {
                     const product = new Product()
                     product.fromPostgre(row)

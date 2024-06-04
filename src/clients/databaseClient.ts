@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 import { POSTGRE_DATABASE, POSTGRE_HOST, POSTGRE_PASSWORD, POSTGRE_PORT, POSTGRE_USER } from "../config/environments";
-import { error, info, postgresLog } from "../constants/constants";
+import { error, infoLog, postgresLog } from "../constants/constants";
 
 export const pool = new Pool({
     user: POSTGRE_USER,
@@ -25,7 +25,7 @@ export const databaseClient = async () => {
                 score DECIMAL(3,1)
             );`
         )
-        .then((res: any) => console.log(info(), postgresLog('Postgre', 'establishments table created if not exists')))
+        .then((res: any) => console.log(infoLog(), postgresLog('Postgre', 'establishments table created if not exists')))
         .catch((err: any) => console.log(error(), postgresLog('Postgre', 'Error creating establishments table')))
 
     await pool
@@ -38,7 +38,7 @@ export const databaseClient = async () => {
                 score DECIMAL(3,1)
             );`
         )
-        .then((res: any) => console.log(info(), postgresLog('Postgre', 'menus table created if not exists')))
+        .then((res: any) => console.log(infoLog(), postgresLog('Postgre', 'menus table created if not exists')))
         .catch((err: any) => console.log(error(), postgresLog('Postgre', 'Error creating menus table')))
 
     await pool
@@ -61,7 +61,7 @@ export const databaseClient = async () => {
                 recovery_code NUMERIC(5) NULL
             );`
         )
-        .then((res: any) => console.log(info(), postgresLog('Postgre', 'users table created if not exists')))
+        .then((res: any) => console.log(infoLog(), postgresLog('Postgre', 'users table created if not exists')))
         .catch((err: any) => console.log(error(), postgresLog('Postgre', 'Error creating users table')))
 
     await pool
@@ -86,7 +86,7 @@ export const databaseClient = async () => {
                 ON DELETE SET NULL
             );`
         )
-        .then((res: any) => console.log(info(), postgresLog('Postgre', 'publications table created if not exists')))
+        .then((res: any) => console.log(infoLog(), postgresLog('Postgre', 'publications table created if not exists')))
         .catch((err: any) => console.log(error(), postgresLog('Postgre', 'Error creating publications table')))
 
     await pool
@@ -111,6 +111,6 @@ export const databaseClient = async () => {
                 ON DELETE SET NULL
             );`
         )
-        .then((res: any) => console.log(info(), postgresLog('Postgre', 'products table created if not exists')))
+        .then((res: any) => console.log(infoLog(), postgresLog('Postgre', 'products table created if not exists')))
         .catch((err: any) => console.log(error(), postgresLog('Postgre', 'Error creating products table')))
 }

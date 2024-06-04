@@ -1,6 +1,6 @@
 import { UUID } from "crypto"
 import { pool } from "../../clients/databaseClient"
-import { error, info, postgresLog } from "../../constants/constants"
+import { error, infoLog, postgresLog } from "../../constants/constants"
 import { Exception } from "../../model/exception"
 import { Publication } from "../../model/publication"
 import { IPublicationsRepository } from "./iPublicationsRepository"
@@ -24,7 +24,7 @@ export const publicationsRepository: IPublicationsRepository = {
                 ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`, publication.toArray()
             )
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'New Publication data created'))
+                console.log(infoLog(), postgresLog('Postgre', 'New Publication data created'))
                 return new Exception(200, 'SUCCESS')
             })
             .catch((err: any) => {
@@ -49,7 +49,7 @@ export const publicationsRepository: IPublicationsRepository = {
                 ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`, publication.toArray()
             )
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Publication found by name'))
+                console.log(infoLog(), postgresLog('Postgre', 'Publication found by name'))
                 return res.rowCount
             })
             .catch((err: any) => {
@@ -62,7 +62,7 @@ export const publicationsRepository: IPublicationsRepository = {
         return await pool
             .query(`DELETE FROM ${schemaName} WHERE id = $1`, [id])
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', id, '\t', 'Publication deleted'))
+                console.log(infoLog(), postgresLog('Postgre', id, '\t', 'Publication deleted'))
                 return res.rowCount
             })
             .catch((err: any) => {
@@ -75,7 +75,7 @@ export const publicationsRepository: IPublicationsRepository = {
         return await pool
             .query(`DELETE FROM ${schemaName}`)
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Deleted all publications'))
+                console.log(infoLog(), postgresLog('Postgre', 'Deleted all publications'))
                 return res.rowCount
             })
             .catch((err: any) => {
@@ -91,7 +91,7 @@ export const publicationsRepository: IPublicationsRepository = {
                 if (res.rows.length === 0) {
                     throw new Exception(404, 'Not found exception')
                 }
-                console.log(info(), postgresLog('Postgre', `Publication found by id ${id}`))
+                console.log(infoLog(), postgresLog('Postgre', `Publication found by id ${id}`))
                 const publication = new Publication()
                 publication.fromPostgre(res.rows[0])
                 return publication
@@ -109,7 +109,7 @@ export const publicationsRepository: IPublicationsRepository = {
         return await pool
             .query(`SELECT * FROM ${schemaName} WHERE establishment_id = $1`, [establishmentId])
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Publications found by establishment ID'))
+                console.log(infoLog(), postgresLog('Postgre', 'Publications found by establishment ID'))
                 res.rows.map((row: any) => {
                     const publication = new Publication()
                     publication.fromPostgre(row)
@@ -128,7 +128,7 @@ export const publicationsRepository: IPublicationsRepository = {
         return await pool
             .query(`SELECT * FROM ${schemaName} WHERE user_id = $1`, [userId])
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Publications found by user ID'))
+                console.log(infoLog(), postgresLog('Postgre', 'Publications found by user ID'))
                 res.rows.map((row: any) => {
                     const publication = new Publication()
                     publication.fromPostgre(row)
@@ -147,7 +147,7 @@ export const publicationsRepository: IPublicationsRepository = {
         return await pool
             .query(`SELECT * FROM ${schemaName}`)
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Publications found all'))
+                console.log(infoLog(), postgresLog('Postgre', 'Publications found all'))
                 res.rows.map((row: any) => {
                     const publication = new Publication()
                     publication.fromPostgre(row)
@@ -165,7 +165,7 @@ export const publicationsRepository: IPublicationsRepository = {
         return await pool
             .query(`SELECT SUM(total_score)/(SELECT COUNT(id) FROM ${schemaName} WHERE establishment_id = $1) FROM ${schemaName} WHERE establishment_id = $1`, [establishmentId])
             .then((res: any) => {
-                console.log(info(), postgresLog('Postgre', 'Total score by establishment'))
+                console.log(infoLog(), postgresLog('Postgre', 'Total score by establishment'))
                 return Number(res.rows[0].sum)
             })
             .catch((err: any) => {

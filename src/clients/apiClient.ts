@@ -3,7 +3,7 @@ import { createServer } from "http"
 import swaggerJsdoc from "swagger-jsdoc"
 import { serve, setup } from "swagger-ui-express"
 import { RESTAPI_DOMAIN, RESTAPI_HOST, RESTAPI_PORT, RESTAPI_PROTOCOL } from "../config/environments"
-import { apiLog, info } from "../constants/constants"
+import { apiLog, infoLog } from "../constants/constants"
 import { routerClient } from "../router/router"
 import { apiUrl } from "../utils/utils"
 
@@ -72,6 +72,6 @@ export const apiClient = () => {
     //     rejectUnauthorized: true
     // }, app).listen(port, () => console.log(info(), apiLog('Api', '\t', 'running in port', port)))
 
-    createServer(app).listen(port, () => console.log(info(), apiLog('Api', '\t', 'running in port', port)))
+    createServer(app).listen(port, () => console.log(infoLog(), apiLog('Api', '\t', 'running in port', port)))
 
 }

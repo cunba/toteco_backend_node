@@ -2,7 +2,7 @@ import { json } from "body-parser"
 import { randomUUID, UUID } from "crypto"
 import { Router } from "express"
 import { body, ValidationError, validationResult } from "express-validator"
-import { apiLog, error, info } from "../constants/constants"
+import { apiLog, error, infoLog } from "../constants/constants"
 import { MenuDTO } from "../model/DTO/menuDTO"
 import { Exception } from "../model/exception"
 import { Menu } from "../model/menu"
@@ -55,7 +55,7 @@ menusControllerRouter.post('/menus', json(),
     body('price').trim().notEmpty().isNumeric(),
     body('score').trim().notEmpty().isNumeric(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'New menu request:'))
+        console.log(infoLog(), apiLog('Api', '\t', 'New menu request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
 
         const errors: any = validationResult(req)
@@ -147,7 +147,7 @@ menusControllerRouter.put('/menus', json(),
     body('price').trim().notEmpty().isNumeric(),
     body('score').trim().notEmpty().isNumeric(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'Update menu request:'))
+        console.log(infoLog(), apiLog('Api', '\t', 'Update menu request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
 
         const errors: any = validationResult(req)

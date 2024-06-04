@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { JwtPayload, verify } from "jsonwebtoken"
-import { apiLog, info } from "../constants/constants"
+import { apiLog, infoLog } from "../constants/constants"
 import establishmentsControllerRouter from "../controllers/establishmentsController"
 import loginControllerRouter from "../controllers/loginController"
 import menusControllerRouter from "../controllers/menuController"
@@ -28,11 +28,11 @@ export const routerClient = () => {
             const method = req.method
             const token = req.headers.authorization
 
-            if (url === '/Toteco/users' && method === 'POST') {
-                console.log(info(), apiLog('Create user, no authorization needed'))
+            if ((url === '/Toteco/users' && method === 'POST') || url.includes('/Toteco/users/update-recovery-code')) {
+                console.log(infoLog(), apiLog('Create user, no authorization needed'))
                 next();
             } else if (token !== undefined && token !== null && token !== "") {
-                console.log(info(), apiLog('Token provided'))
+                console.log(infoLog(), apiLog('Token provided'))
                 const tokenInfo = verify(token.replace('Bearer ', ''), 'toteco') as JwtPayload
                 const userInfo = JSON.parse(tokenInfo.data)
                 try {
@@ -40,10 +40,10 @@ export const routerClient = () => {
                 } catch (err: any) {
                     return res.sendStatus(401)
                 }
-                console.log(info(), apiLog('Token valid'))
+                console.log(infoLog(), apiLog('Token valid'))
                 next();
             } else {
-                console.log(info(), apiLog(`No token provided`))
+                console.log(infoLog(), apiLog(`No token provided`))
                 return res.sendStatus(401);
             }
         } catch (err: any) {

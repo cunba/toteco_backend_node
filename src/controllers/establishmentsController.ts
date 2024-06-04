@@ -2,7 +2,7 @@ import { json } from "body-parser"
 import { randomUUID, UUID } from "crypto"
 import { Router } from "express"
 import { body, ValidationError, validationResult } from "express-validator"
-import { apiLog, error, info } from "../constants/constants"
+import { apiLog, error, infoLog } from "../constants/constants"
 import { EstablishmentDTO } from "../model/DTO/establishmentDTO"
 import { Establishment } from "../model/establishment"
 import { Exception } from "../model/exception"
@@ -57,7 +57,7 @@ establishmentsControllerRouter.post('/establishments', json(),
     body('name').trim().notEmpty(),
     body('location').trim().notEmpty(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'New establishment request:'))
+        console.log(infoLog(), apiLog('Api', '\t', 'New establishment request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
 
         const errors: any = validationResult(req)
@@ -156,7 +156,7 @@ establishmentsControllerRouter.put('/establishments', json(),
     body('location').trim().notEmpty(),
     body('score').notEmpty(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'Update establishment request:'))
+        console.log(infoLog(), apiLog('Api', '\t', 'Update establishment request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
 
         const errors: any = validationResult(req)

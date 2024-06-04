@@ -17,6 +17,8 @@ export interface IUsersRepository extends IRepositery<User> {
 
     updatePassword: (id: UUID, password: string) => Promise<string | Exception>
 
+    updateRecoveryCode: (id: UUID, code: number | undefined) => Promise<string | Exception>
+
     updatePublicationsNumber: (id: UUID) => Promise<string | Exception>
 
 }

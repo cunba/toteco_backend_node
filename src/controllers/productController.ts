@@ -2,7 +2,7 @@ import { json } from "body-parser"
 import { randomUUID, UUID } from "crypto"
 import { Router } from "express"
 import { body, ValidationError, validationResult } from "express-validator"
-import { apiLog, error, info } from "../constants/constants"
+import { apiLog, error, infoLog } from "../constants/constants"
 import { ProductDTO } from "../model/DTO/productDTO"
 import { Exception } from "../model/exception"
 import { Product } from "../model/product"
@@ -60,7 +60,7 @@ productsControllerRouter.post('/products', json(),
     body('price').trim().isNumeric(),
     body('score').trim().isNumeric(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'New product request:'))
+        console.log(infoLog(), apiLog('Api', '\t', 'New product request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
 
         const errors: any = validationResult(req)
@@ -178,7 +178,7 @@ productsControllerRouter.put('/products', json(),
     body('price').trim().isNumeric(),
     body('score').trim().isNumeric(),
     async (req, res) => {
-        console.log(info(), apiLog('Api', '\t', 'Update product request:'))
+        console.log(infoLog(), apiLog('Api', '\t', 'Update product request:'))
         console.log('\t\t', apiLog(JSON.stringify(req.body)))
 
         const errors: any = validationResult(req)
